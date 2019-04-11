@@ -43,7 +43,7 @@ $res = $DB->get_records_sql($query);
                 </div>
                 <p style="margin: 0 auto; width: 500px;">Chọn sinh viên:</p>
                 <div class="input-group choose-student" style="margin: 0 auto; width: 500px;">
-                    <select class="custom-select" id="student" name="studentId">
+                    <select class="form-control selectpicker" id="student" name="studentId" data-live-search="true">
                         <?php foreach ($res as $key => $value) { ?>
                             <option value="<?php echo $value->{'id'}; ?>">
                                 <?php echo $value->{'firstname'} . " " . $value->{'lastname'}; ?>
@@ -57,7 +57,7 @@ $res = $DB->get_records_sql($query);
                 <div class="form-group choose-student-compare" style="margin: 0 auto; width: 500px; display: none;"
                      id="compare-student">
                     <label>Chọn sinh viên để so sánh:</label>
-                    <select class="form-control" id="choose-compare-student">
+                    <select class="form-control selectpicker" id="choose-compare-student" data-live-search="true">
                         <?php foreach ($res as $key => $value) { ?>
                             <option value="<?php echo $value->{'id'}; ?>">
                                 <?php echo $value->{'firstname'} . " " . $value->{'lastname'}; ?>
@@ -83,6 +83,8 @@ $res = $DB->get_records_sql($query);
             <button type="button" id="graph" class="btn btn-success">Đồ thị</button>
         </div>
     </div>
+
 <?php include('inc/footer.php') ?>
+
 </body>
 </html>

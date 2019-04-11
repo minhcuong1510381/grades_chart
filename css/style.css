@@ -39,3 +39,6 @@ th.headerSortDown {
     background-repeat: no-repeat;
     background-position: center right;
 }
+button.btn.dropdown-toggle.btn-light {
+    border-color: #ced4da;
+}
