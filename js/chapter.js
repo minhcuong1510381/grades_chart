@@ -81,7 +81,7 @@ $(document).ready(function () {
                     ]
                 };
                 $(".chart-container").css("display", "block");
-                $(".comment").css("display", "block");
+                // $(".comment").css("display", "block");
                 var ctx = $("#chapterCanvas");
 
                 var barGraph = new Chart(ctx, {
@@ -90,45 +90,45 @@ $(document).ready(function () {
                     options: options
                 });
 
-                var h5 = document.createElement("h5");
-                h5.innerHTML = "Đánh giá mức độ hiệu quả của bài kiểm tra:";
-                $(".comment").append(h5);
+                // var h5 = document.createElement("h5");
+                // h5.innerHTML = "Đánh giá mức độ hiệu quả của bài kiểm tra:";
+                // $(".comment").append(h5);
 
-                var ol = document.createElement("ol");
-                $(".comment").append(ol);
+                // var ol = document.createElement("ol");
+                // $(".comment").append(ol);
 
-                for (var i = 0; i < data.length; i++){
-                    var li = document.createElement("li");
-                    if(data[i] <= 30){
-                        var span = document.createElement("i");
-                        span.setAttribute('class', 'fa fa-exclamation-circle');
-                        span.setAttribute('style', 'color: #ee5253');
-                        li.innerHTML = vertex[i] + ": ";
-                        li.append(span);
-                    }
-                    else if(data[i] > 30 && data[i] <= 50){
-                        var span = document.createElement("i");
-                        span.setAttribute('class', 'fa fa-exclamation-triangle');
-                        span.setAttribute('style', 'color: orange');
-                        li.innerHTML = vertex[i] + ": ";
-                        li.append(span);
-                    }
-                    else if(data[i] > 50 && data[i] <= 70){
-                        var span = document.createElement("i");
-                        span.setAttribute('class', 'em em-slightly_smiling_face');
-                        span.setAttribute('style', 'font-size: 12px');
-                        li.innerHTML = vertex[i] + ": ";
-                        li.append(span);
-                    }
-                    else if(data[i] >= 70){
-                        var span = document.createElement("i");
-                        span.setAttribute('class', 'fa fa-thumbs-up');
-                        span.setAttribute('style', 'color: #4267b2');
-                        li.innerHTML = vertex[i] + ": ";
-                        li.append(span);
-                    }
-                    ol.append(li);
-                }
+                // for (var i = 0; i < data.length; i++){
+                //     var li = document.createElement("li");
+                //     if(data[i] <= 30){
+                //         var span = document.createElement("i");
+                //         span.setAttribute('class', 'fa fa-exclamation-circle');
+                //         span.setAttribute('style', 'color: #ee5253');
+                //         li.innerHTML = vertex[i] + ": ";
+                //         li.append(span);
+                //     }
+                //     else if(data[i] > 30 && data[i] <= 50){
+                //         var span = document.createElement("i");
+                //         span.setAttribute('class', 'fa fa-exclamation-triangle');
+                //         span.setAttribute('style', 'color: orange');
+                //         li.innerHTML = vertex[i] + ": ";
+                //         li.append(span);
+                //     }
+                //     else if(data[i] > 50 && data[i] <= 70){
+                //         var span = document.createElement("i");
+                //         span.setAttribute('class', 'em em-slightly_smiling_face');
+                //         span.setAttribute('style', 'font-size: 12px');
+                //         li.innerHTML = vertex[i] + ": ";
+                //         li.append(span);
+                //     }
+                //     else if(data[i] >= 70){
+                //         var span = document.createElement("i");
+                //         span.setAttribute('class', 'fa fa-thumbs-up');
+                //         span.setAttribute('style', 'color: #4267b2');
+                //         li.innerHTML = vertex[i] + ": ";
+                //         li.append(span);
+                //     }
+                //     ol.append(li);
+                // }
             }
         });
     });

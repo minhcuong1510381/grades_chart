@@ -24,7 +24,7 @@ if ($studentIdCompare) {
 
 $sqlCourseSection = "SELECT name, sequence
 						FROM {course_sections}
-						WHERE name IS NOT NULL 
+						WHERE name IS NOT NULL  AND course = $courseId
 						ORDER BY id";
 
 $courseSections = $DB->get_records_sql($sqlCourseSection);

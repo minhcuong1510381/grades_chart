@@ -20,9 +20,11 @@ if ($isStudent == 2) {
     return false;
 }
 
-$query = "SELECT id, u.firstname, u.lastname 
+$query = "SELECT u.id, u.firstname, u.lastname
           FROM {user} u
-          WHERE u.id <> 1 AND u.password <> 'restored' 
+          INNER JOIN {role_assignments} ra ON ra.userid = u.id
+          INNER JOIN {context} ct ON ct.id = ra.contextid 
+          WHERE u.suspended = 0 AND ct.contextlevel = 50 AND ct.instanceid = $courseId
           ORDER BY u.id ASC";
 
 $res = $DB->get_records_sql($query);
