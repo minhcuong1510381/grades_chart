@@ -17,6 +17,8 @@ $(document).ready(function () {
                 data: frm.serializeArray(),
                 success: function (data) {
                     var obj = JSON.parse(data);
+                    // console.log(obj);
+                    // return false;
                     if (obj.response == 1) {
                         alert("Sinh viên " + obj.user + " hiện chưa có điểm");
                         return false;
