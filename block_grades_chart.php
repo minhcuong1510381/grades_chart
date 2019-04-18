@@ -36,6 +36,7 @@ class block_grades_chart extends block_base
         $reviewCourseURL = new moodle_url('/blocks/grades_chart/reviewcourse.php', array('courseId' => $courseId));
         $reviewChapterURL = new moodle_url('/blocks/grades_chart/reviewchapter.php', array('courseId' => $courseId));
         $topStudentURL = new moodle_url('/blocks/grades_chart/avestudent.php', array('courseId' => $courseId));
+        $addInstructionURL = new moodle_url('/blocks/grades_chart/addinstruction.php', array('courseId' => $courseId));
 
         $this->content = new stdClass;
 
@@ -45,6 +46,7 @@ class block_grades_chart extends block_base
             $this->content->text = '<li><a href="' . $chartURL . '" target="_blank">Biểu đồ năng lực sinh viên</a></li>';
             $this->content->text .= '<li><a href="' . $reviewChapterURL . '" target="_blank">Biểu đồ phần trăm sinh viên trên trung bình của từng bài kiểm tra</a></li>';
             $this->content->text .= '<li><a href="' . $topStudentURL . '" target="_blank">Tổng kết điểm trung bình của sinh viên</a></li>';
+            $this->content->text .= '<li><a href="' . $addInstructionURL . '" target="_blank">Bảng hỗ trợ sinh viên</a></li>';
         }
 
         $this->content->footer = '<hr/>';
