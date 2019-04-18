@@ -32,38 +32,64 @@ $courseSections = $DB->get_records_sql($sqlCourseSection);
 $courseSections = block_grades_chart_convert_to_array($courseSections);
 
 $arrQuiz = [];
-
+$count = 0;
+$countCp = 0;
 foreach ($courseSections as $key => $value) {
+
     $temp = $courseSections[$key]->{'sequence'};
 
-    $sqlQuiz = "SELECT cm.id, cm.instance, qg.grade
+    $sqlQuiz = "SELECT cm.id, cm.instance, IFNULL(qg.grade, 0) AS grade
 			FROM {course_modules} cm
 			LEFT JOIN {quiz_grades} qg ON qg.quiz = cm.instance
 			WHERE cm.id IN ($temp) AND cm.module = 16 AND cm.course = $courseId AND qg.userid = $studentId";
 
-    $a = $DB->get_records_sql($sqlQuiz);
+    $sqlQuizt = "SELECT cm.id, cm.instance, 0 AS grade
+            FROM {course_modules} cm
+            WHERE cm.id IN ($temp) AND cm.module = 16 AND cm.course = $courseId ";
+
+    $a = $DB->get_records_sql($sqlQuizt);
+
+    $b1 = $DB->get_records_sql($sqlQuiz);
 
     if ($a) {
-        $arrQuiz[] = block_grades_chart_convert_to_array($a) + ["name" => $value->{'name'}];
+        $arrQuiz[] = block_grades_chart_convert_to_array($b1) + ["name" => $value->{'name'}];
+
+        foreach ($arrQuiz as $key => $value) {
+            if (!array_key_exists("grade", $value[0])) {
+                array_push($arrQuiz[$key], ["grade" => 0]);
+                $count += 1;
+            }
+        }
 
         if ($studentIdCompare) {
             $sqlQuizCp = "SELECT cm.id, cm.instance, qg.grade
 				FROM {course_modules} cm
 				LEFT JOIN {quiz_grades} qg ON qg.quiz = cm.instance
 				WHERE cm.id IN ($temp) AND cm.module = 16 AND cm.course = $courseId AND qg.userid = $studentIdCompare";
-            $b = $DB->get_records_sql($sqlQuizCp);
+
+            $sqlQuizCpt = "SELECT cm.id, cm.instance, 0 AS grade
+            FROM {course_modules} cm
+            WHERE cm.id IN ($temp) AND cm.module = 16 AND cm.course = $courseId ";
+
+            $b = $DB->get_records_sql($sqlQuizCpt);
+
+            $a1 = $DB->get_records_sql($sqlQuizCp);
+
             if ($b) {
-                $arrQuizCp[] = block_grades_chart_convert_to_array($b) + ["name" => $value->{'name'}];
+                $arrQuizCp[] = block_grades_chart_convert_to_array($a1) + ["name" => $value->{'name'}];
+
+                foreach ($arrQuizCp as $key => $value) {
+                    if (!array_key_exists("grade", $value[0])) {
+                        array_push($arrQuizCp[$key], ["grade" => 0]);
+                        $countCp += 1;
+                    }
+                }
             }
         }
     }
 }
 
-//echo "<pre>";
-//print_r($arrQuiz);
-//die;
-
-if ($arrQuiz) {
+if ($count < count($arrQuiz)) {
     $arrRes = [];
 
     foreach ($arrQuiz as $row) {
@@ -78,7 +104,7 @@ if ($arrQuiz) {
     }
 
     if ($studentIdCompare) {
-        if ($arrQuizCp) {
+        if ($countCp < count($arrQuizCp)) {
             $arrResCp = [];
 
             foreach ($arrQuizCp as $row) {

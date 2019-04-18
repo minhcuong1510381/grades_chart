@@ -10,6 +10,7 @@ $courseId = $_GET['courseId'];
 $sqlUser = "SELECT firstname, lastname, id
 			FROM {user}
 			WHERE id = $userId";
+
 $user = $DB->get_record_sql($sqlUser);
 
 $sqlCourseSection = "SELECT name, sequence
@@ -23,6 +24,8 @@ $courseSections = block_grades_chart_convert_to_array($courseSections);
 
 $arrQuiz = [];
 
+$count = 0;
+
 foreach ($courseSections as $key => $value) {
     $temp = $courseSections[$key]->{'sequence'};
 
@@ -31,14 +34,27 @@ foreach ($courseSections as $key => $value) {
 			LEFT JOIN {quiz_grades} qg ON qg.quiz = cm.instance
 			WHERE cm.id IN ($temp) AND cm.module = 16 AND cm.course = $courseId AND qg.userid = $userId";
 
-    $a = $DB->get_records_sql($sqlQuiz);
+    $sqlQuizt = "SELECT cm.id, cm.instance, 0 AS grade
+            FROM {course_modules} cm
+            WHERE cm.id IN ($temp) AND cm.module = 16 AND cm.course = $courseId ";
+
+    $a = $DB->get_records_sql($sqlQuizt);
+
+    $b1 = $DB->get_records_sql($sqlQuiz);
 
     if ($a) {
-        $arrQuiz[] = block_grades_chart_convert_to_array($a) + ["name" => $value->{'name'}];
+        $arrQuiz[] = block_grades_chart_convert_to_array($b1) + ["name" => $value->{'name'}];
+
+        foreach ($arrQuiz as $key => $value) {
+            if (!array_key_exists("grade", $value[0])) {
+                array_push($arrQuiz[$key], ["grade" => 0]);
+                $count++;
+            }
+        }
     }
 }
 
-if ($arrQuiz) {
+if ($count < count($arrQuiz)) {
     $arrRes = [];
 
     foreach ($arrQuiz as $row) {
@@ -53,12 +69,7 @@ if ($arrQuiz) {
     }
 
     print json_encode($arrRes);
-}
-else{
+} else {
     $msg = ["user" => $user->{'firstname'} . " " . $user->{'lastname'}, "response" => 1];
     print json_encode($msg);
 }
-
-//echo "<pre>";
-//print_r($arrQuiz);
-//die;
