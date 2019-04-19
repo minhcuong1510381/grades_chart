@@ -17,7 +17,7 @@ $query = "SELECT u.id, u.firstname, u.lastname
 
 $res = $DB->get_records_sql($query);
 
-$query1 = "SELECT name,
+$query1 = "SELECT name, q.id,
  			( SELECT COUNT(*) FROM {quiz_grades} qg WHERE qg.quiz = q.id AND qg.grade >= 5) AS grade_greater_than_5
  			FROM {quiz} q INNER JOIN {quiz_grades} qg ON qg.quiz = q.id  
 			WHERE q.course = $courseId
@@ -31,7 +31,7 @@ if ($aQuiz) {
     $data = [];
 
     foreach ($aQuiz as $key => $value) {
-        $data[] = ["name" => $value->{'name'}, "per_student_grade_gt_5" => round(($value->{'grade_greater_than_5'} / count($res)) * 100, 2), "count_student_has_grade_lt_5" => (count($res) - $value->{'grade_greater_than_5'})];
+        $data[] = ["name" => $value->{'name'}, "quizId" => $value->{'id'} , "per_student_grade_gt_5" => round(($value->{'grade_greater_than_5'} / count($res)) * 100, 2),"count_student_has_grade_gt_5" => $value->{'grade_greater_than_5'}, "count_student_has_grade_lt_5" => (count($res) - $value->{'grade_greater_than_5'})];
     }
 
     print json_encode($data);

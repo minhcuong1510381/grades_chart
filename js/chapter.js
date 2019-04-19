@@ -1,8 +1,12 @@
 $(document).ready(function () {
     $('#form-chapter').on('submit', function (e) {
+        $('.table-container').empty();
+        $('#detail').unbind("click");
+        $('.table-container').css("display", "none");
+        $('.graph').css("display", "none");
+        $('#detail').css("display", "none");
         $('#chapterCanvas').remove();
         $('.chart-container').append('<canvas id="chapterCanvas"><canvas>');
-        $('.comment').empty();
         e.preventDefault();
         var frm = $('#form-chapter');
         $.ajax({
@@ -35,7 +39,7 @@ $(document).ready(function () {
                         boder.push('rgb(255, 99, 132)');
                     }
                 }
-                console.log(color);
+                // console.log(color);
 
                 var options = {
                     scales: {
@@ -81,7 +85,9 @@ $(document).ready(function () {
                     ]
                 };
                 $(".chart-container").css("display", "block");
-                // $(".comment").css("display", "block");
+                $("#detail").css("display", "block");
+                $(".detail").css("display", "block");
+
                 var ctx = $("#chapterCanvas");
 
                 var barGraph = new Chart(ctx, {
@@ -90,45 +96,77 @@ $(document).ready(function () {
                     options: options
                 });
 
-                // var h5 = document.createElement("h5");
-                // h5.innerHTML = "Đánh giá mức độ hiệu quả của bài kiểm tra:";
-                // $(".comment").append(h5);
+                $('#detail').click(function (e) {
+                    e.preventDefault();
+                    $('.chart-container').css("display", "none");
+                    $('.table-container').css("display", "block");
+                    $('.detail').css("display", "none");
+                    $('.graph').css("display", "block");
 
-                // var ol = document.createElement("ol");
-                // $(".comment").append(ol);
+                    var table = document.createElement("table");
+                    table.setAttribute("class", "table table-bordered");
+                    $('.table-container').append(table);
 
-                // for (var i = 0; i < data.length; i++){
-                //     var li = document.createElement("li");
-                //     if(data[i] <= 30){
-                //         var span = document.createElement("i");
-                //         span.setAttribute('class', 'fa fa-exclamation-circle');
-                //         span.setAttribute('style', 'color: #ee5253');
-                //         li.innerHTML = vertex[i] + ": ";
-                //         li.append(span);
-                //     }
-                //     else if(data[i] > 30 && data[i] <= 50){
-                //         var span = document.createElement("i");
-                //         span.setAttribute('class', 'fa fa-exclamation-triangle');
-                //         span.setAttribute('style', 'color: orange');
-                //         li.innerHTML = vertex[i] + ": ";
-                //         li.append(span);
-                //     }
-                //     else if(data[i] > 50 && data[i] <= 70){
-                //         var span = document.createElement("i");
-                //         span.setAttribute('class', 'em em-slightly_smiling_face');
-                //         span.setAttribute('style', 'font-size: 12px');
-                //         li.innerHTML = vertex[i] + ": ";
-                //         li.append(span);
-                //     }
-                //     else if(data[i] >= 70){
-                //         var span = document.createElement("i");
-                //         span.setAttribute('class', 'fa fa-thumbs-up');
-                //         span.setAttribute('style', 'color: #4267b2');
-                //         li.innerHTML = vertex[i] + ": ";
-                //         li.append(span);
-                //     }
-                //     ol.append(li);
-                // }
+                    var thead = document.createElement("thead");
+                    table.appendChild(thead);
+
+                    var trHead = document.createElement("tr");
+                    thead.appendChild(trHead);
+
+                    var thHead1 = document.createElement("th");
+                    var thHead2 = document.createElement("th");
+                    thHead1.innerHTML = "Tên bài kiểm tra";
+                    thHead2.innerHTML = "Số liệu";
+
+                    trHead.appendChild(thHead1);
+                    trHead.appendChild(thHead2);
+
+                    var tbody = document.createElement("tbody");
+                    table.appendChild(tbody);
+
+                    for (var i = 0; i < obj.length; i++){
+                        var trbody1 = document.createElement("tr");
+                        var trbody2 = document.createElement("tr");
+
+                        tbody.appendChild(trbody1);
+                        tbody.appendChild(trbody2);
+
+                        var tdbody1 = document.createElement("th");
+                        tdbody1.setAttribute("rowspan", "2");
+                        var tdbody2 = document.createElement("td");
+                        var abody2 = document.createElement("a");
+                        var abody3 = document.createElement("a");
+                        var tdbody3 = document.createElement("td");
+
+                        tdbody1.innerHTML = obj[i].name;
+                        abody2.innerHTML = obj[i].count_student_has_grade_gt_5 + " Học viên TRÊN trung bình";
+                        abody3.innerHTML = obj[i].count_student_has_grade_lt_5 + " Học viên DƯỚI trung bình";
+                        abody2.setAttribute("href", "#");
+                        abody2.setAttribute("data-toggle", "modal");
+                        abody2.setAttribute("data-target", "#modalPass["+obj[i].quizId+"]");
+                        abody3.setAttribute("href", "#");
+                        abody3.setAttribute("data-toggle", "modal");
+                        abody3.setAttribute("data-target", "#modalNotPass["+obj[i].quizId+"]");
+
+                        tdbody2.appendChild(abody2);
+                        tdbody3.appendChild(abody3);
+
+                        trbody1.appendChild(tdbody1);
+                        trbody1.appendChild(tdbody2);
+                        trbody2.appendChild(tdbody3);
+
+                    }
+                });
+
+                $('#graph').click(function (e) {
+                    e.preventDefault();
+                    $('.chart-container').css("display", "block");
+                    $('.table-container').empty();
+                    $('.detail').css("display", "block");
+                    $('.graph').css("display", "none");
+                });
+
+
             }
         });
     });

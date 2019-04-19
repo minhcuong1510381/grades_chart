@@ -42,46 +42,53 @@ $result = groupArray($aQuiz, "quizid");
     <div class="content" style="margin-top: 30px;">
         <table class="table table-bordered" style="width: 700px; margin: 0 auto;">
             <thead>
-                <tr>
-                    <th>Tên bài kiểm tra</th>
-                    <th>Hành động</th>
-                </tr>
+            <tr>
+                <th>Tên bài kiểm tra</th>
+                <th>Hành động</th>
+            </tr>
             </thead>
             <tbody>
-                <?php foreach($result as $key => $row){  ?>
-                    <tr>
-                        <td><?php echo $row[0]['name']; ?></td>
-                        <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal[<?php echo $key; ?>]">Thêm hướng dẫn</button></td>
-                    </tr>
-                <?php } ?>
+            <?php foreach ($result as $key => $row) { ?>
+                <tr>
+                    <td><?php echo $row[0]['name']; ?></td>
+                    <td>
+                        <button type="button" class="btn btn-info" data-toggle="modal"
+                                data-target="#myModal[<?php echo $key; ?>]">Thêm hướng dẫn
+                        </button>
+                    </td>
+                </tr>
+            <?php } ?>
             </tbody>
         </table>
-        <?php foreach($result as $key => $row){  ?>
-        <div id="myModal[<?php echo $key; ?>]" class="modal fade" role="dialog">
-          <div class="modal-dialog">
+        <?php foreach ($result as $key => $row) { ?>
+            <div id="myModal[<?php echo $key; ?>]" class="modal fade" role="dialog">
+                <div class="modal-dialog">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4>Thêm chi tiết hướng dẫn các câu hỏi</h4>
-              </div>
-              <?php foreach ($row as $k => $v) { ?>
-              <div class="modal-body">
-                <a data-toggle="collapse" data-html="true" data-placement="right" href="#cauhoi[<?php echo $k; ?>]" role="button" aria-expanded="false" title="<?php echo htmlentities($v['questiontext']); ?>">
-                    Câu hỏi thứ <?php echo $k+1; ?>
-                  </a>
-                <textarea class="collapse" name="bai[<?php echo $key; ?>]-cau[<?php echo $k; ?>]" style="width: 100%;" id="cauhoi[<?php echo $k; ?>]"></textarea>
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Thêm chi tiết hướng dẫn các câu hỏi</h4>
+                        </div>
+                        <?php foreach ($row as $k => $v) { ?>
+                            <div class="modal-body">
+                                <a data-toggle="collapse" data-html="true" data-placement="right"
+                                   href="#cauhoi[<?php echo $k; ?>]" role="button" aria-expanded="false"
+                                   title="<?php echo htmlentities($v['questiontext']); ?>">
+                                    Câu hỏi thứ <?php echo $k + 1; ?>
+                                </a>
+                                <textarea class="collapse" name="bai[<?php echo $key; ?>]-cau[<?php echo $k; ?>]"
+                                          style="width: 100%;" id="cauhoi[<?php echo $k; ?>]"></textarea>
+                            </div>
+                        <?php } ?>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" data-dismiss="modal">Xác nhận</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+
                 </div>
-                <?php } ?>
-
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" data-dismiss="modal">Xác nhận</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-              </div>
             </div>
-
-          </div>
-        </div>
         <?php } ?>
         <div class="redirect-course" style="margin: 0 auto; width: 500px; text-align: center; margin-top: 20px;">
             <a href="<?php echo $CFG->wwwroot . '/course/view.php?id=' . $courseId; ?>">
@@ -93,9 +100,9 @@ $result = groupArray($aQuiz, "quizid");
 
 <?php include('inc/footer.php') ?>
 <script>
-$(document).ready(function(){
-  $('[data-toggle="collapse"]').tooltip(); 
-});
+    $(document).ready(function () {
+        $('[data-toggle="collapse"]').tooltip();
+    });
 </script>
 </body>
 </html>

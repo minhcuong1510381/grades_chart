@@ -79,7 +79,7 @@ $res = $DB->get_records_sql($query);
         <div class="detail" style="display:none; margin: 0 auto; width: 100px; padding-top: 10px; text-align: center">
             <button type="button" id="detail" class="btn btn-primary">Chi tiết</button>
         </div>
-        <div class="graph" style="display:none; margin: 0 auto; width: 100px; text-align: center">
+        <div class="graph" style="display:none; margin: 0 auto; width: 100px; padding-top: 10px; text-align: center">
             <button type="button" id="graph" class="btn btn-success">Đồ thị</button>
         </div>
     </div>
