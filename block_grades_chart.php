@@ -33,10 +33,10 @@ class block_grades_chart extends block_base
         $courseId = $_GET['id'];
         $chartURL = new moodle_url('/blocks/grades_chart/gradeschart.php', array('courseId' => $courseId));
         $tableURL = new moodle_url('/blocks/grades_chart/gradestable.php', array('courseId' => $courseId));
-        $reviewCourseURL = new moodle_url('/blocks/grades_chart/reviewcourse.php', array('courseId' => $courseId));
         $reviewChapterURL = new moodle_url('/blocks/grades_chart/reviewchapter.php', array('courseId' => $courseId));
         $topStudentURL = new moodle_url('/blocks/grades_chart/avestudent.php', array('courseId' => $courseId));
         $addInstructionURL = new moodle_url('/blocks/grades_chart/addinstruction.php', array('courseId' => $courseId));
+        $accesscontentURL = new moodle_url('/blocks/grades_chart/graphresourcestartup.php', array('courseId' => $courseId));
 
         $this->content = new stdClass;
 
@@ -44,8 +44,9 @@ class block_grades_chart extends block_base
             $this->content->text = '<li><a href="' . $tableURL . '" target="_blank">Bảng xem lại khóa học</a></li>';
         } else {
             $this->content->text = '<li><a href="' . $chartURL . '" target="_blank">Biểu đồ năng lực sinh viên</a></li>';
-            $this->content->text .= '<li><a href="' . $reviewChapterURL . '" target="_blank">Biểu đồ phần trăm sinh viên trên trung bình của từng bài kiểm tra</a></li>';
-            $this->content->text .= '<li><a href="' . $topStudentURL . '" target="_blank">Tổng kết điểm trung bình của sinh viên</a></li>';
+            $this->content->text .= '<li><a href="' . $accesscontentURL . '" target="_blank">Biểu đồ số lượt truy cập</a></li>';
+//            $this->content->text .= '<li><a href="' . $reviewChapterURL . '" target="_blank">Biểu đồ phần trăm sinh viên trên trung bình của từng bài kiểm tra</a></li>';
+//            $this->content->text .= '<li><a href="' . $topStudentURL . '" target="_blank">Tổng kết điểm trung bình của sinh viên</a></li>';
             $this->content->text .= '<li><a href="' . $addInstructionURL . '" target="_blank">Bảng hỗ trợ sinh viên</a></li>';
         }
 
