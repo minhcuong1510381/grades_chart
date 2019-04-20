@@ -320,7 +320,7 @@ function block_grades_chart_get_course_grouping_members($course) {
     }
     return($groupingmembers);
 }
-function block_analytics_graphs_get_course_name($course) {
+function block_grades_chart_get_course_name($course) {
     global $DB;
     $sql = "SELECT
               a.fullname
@@ -339,4 +339,135 @@ function block_analytics_graphs_get_course_name($course) {
     }
 
     return $resultname;
+}
+function block_grades_chart_get_number_of_days_access_by_week($course, $estudantes, $startdate, $legacy=0) {
+    global $DB;
+    $timezone = new DateTimeZone(core_date::get_server_timezone());
+    $timezoneadjust   = $timezone->getOffset(new DateTime);
+    foreach ($estudantes as $tupla) {
+        $inclause[] = $tupla->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($timezoneadjust, $timezoneadjust, $startdate, $course, $startdate), $inparams);
+    if (!$legacy) {
+        $sql = "SELECT temp2.userid+(week*1000000) as id, temp2.userid, firstname, lastname, email, week,
+                number, numberofpageviews
+                FROM (
+                    SELECT temp.userid, week, COUNT(*) as number, SUM(numberofpageviews) as numberofpageviews
+                    FROM (
+                        SELECT MIN(log.id) as id, log.userid,
+                            FLOOR((log.timecreated + ?)/ 86400)   as day,
+                            FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
+                            COUNT(*) as numberofpageviews
+                        FROM {logstore_standard_log} log
+                        WHERE courseid = ? AND action = 'viewed' AND target = 'course'
+                            AND log.timecreated >= ? AND log.userid $insql
+                        GROUP BY userid, day, week
+                    ) as temp
+                    GROUP BY week, temp.userid
+                ) as temp2
+                LEFT JOIN {user} usr ON usr.id = temp2.userid
+                ORDER BY LOWER(firstname), LOWER(lastname),userid, week";
+    } else {
+        $sql = "SELECT temp2.userid+(week*1000000) as id, temp2.userid, firstname, lastname, email, week,
+                number, numberofpageviews
+                FROM (
+                    SELECT temp.userid, week, COUNT(*) as number, SUM(numberofpageviews) as numberofpageviews
+                    FROM (
+                        SELECT MIN(log.id) as id, log.userid,
+                            FLOOR((log.time + ?)/ 86400)   as day,
+                            FLOOR( (((log.time  + ?) / 86400) - (?/86400))/7) as week,
+                            COUNT(*) as numberofpageviews
+                        FROM {log} log
+                        WHERE course = ? AND action = 'view' AND module = 'course'
+                            AND log.time >= ? AND log.userid $insql
+                        GROUP BY userid, day, week
+                    ) as temp
+                    GROUP BY week, temp.userid
+                ) as temp2
+                LEFT JOIN {user} usr ON usr.id = temp2.userid
+                ORDER BY LOWER(firstname), LOWER(lastname),userid, week";
+    }
+    $resultado = $DB->get_records_sql($sql, $params);
+    return($resultado);
+}
+function block_grades_chart_get_number_of_modules_access_by_week($course, $estudantes, $startdate, $legacy=0) {
+    global $DB;
+    $timezone = new DateTimeZone(core_date::get_server_timezone());
+    $timezoneadjust   = $timezone->getOffset(new DateTime);
+    foreach ($estudantes as $tupla) {
+        $inclause[] = $tupla->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($timezoneadjust, $startdate, $course, $startdate), $inparams);
+    if (!$legacy) {
+        $sql = "SELECT userid+(week*1000000), userid, firstname, lastname, email, week, number
+                FROM (
+                    SELECT  userid, week, COUNT(*) as number
+                    FROM (
+                        SELECT log.userid, objecttable, objectid,
+                        FLOOR((((log.timecreated + ?) / 86400) - (?/86400))/7) as week
+                        FROM {logstore_standard_log} log
+                        WHERE courseid = ? AND action = 'viewed' AND target = 'course_module'
+                        AND log.timecreated >= ? AND log.userid $insql
+                        GROUP BY userid, week, objecttable, objectid
+                    ) as temp
+                    GROUP BY userid, week
+                ) as temp2
+                LEFT JOIN {user} usr ON usr.id = temp2.userid
+                ORDER by LOWER(firstname), LOWER(lastname), userid, week";
+    } else {
+        $sql = "SELECT userid+(week*1000000), userid, firstname, lastname, email, week, number
+                FROM (
+                    SELECT  userid, week, COUNT(*) as number
+                    FROM (
+                        SELECT log.userid, module, cmid,
+                        FLOOR((((log.time + ?) / 86400) - (?/86400))/7) as week
+                        FROM {log} log
+                        WHERE course = ? AND (action = 'view' OR action = action = 'view forum')
+                            AND module <> 'assign' AND cmid <> 0 AND time >= ? AND log.userid $insql
+                        GROUP BY userid, week, module, cmid
+                    ) as temp
+                    GROUP BY userid, week
+                ) as temp2
+                LEFT JOIN {user} usr ON usr.id = temp2.userid
+                ORDER by LOWER(firstname), LOWER(lastname), userid, week";
+    }
+    $resultado = $DB->get_records_sql($sql, $params);
+    return($resultado);
+}
+function block_grades_chart_get_number_of_modules_accessed($course, $estudantes, $startdate, $legacy=0) {
+    global $DB;
+    foreach ($estudantes as $tupla) {
+        $inclause[] = $tupla->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($course, $startdate), $inparams);
+    if (!$legacy) {
+        $sql = "SELECT userid, COUNT(*) as number
+            FROM (
+                SELECT log.userid, objecttable, objectid
+                FROM {logstore_standard_log} log
+                LEFT JOIN {user} usr ON usr.id = log.userid
+                WHERE courseid = ? AND action = 'viewed' AND target = 'course_module'
+                    AND log.timecreated >= ? AND log.userid $insql
+                GROUP BY log.userid, objecttable, objectid
+            ) as temp
+            GROUP BY userid
+            ORDER by userid";
+    } else {
+        $sql = "SELECT userid, COUNT(*) as number
+            FROM (
+                SELECT log.userid, module, cmid
+                FROM {log} log
+                LEFT JOIN {user} usr ON usr.id = log.userid
+                WHERE course = ? AND (action = 'view' OR action = 'view forum')
+                    AND module <> 'assign' AND cmid <> 0  AND log.time >= ? AND log.userid $insql
+                GROUP BY log.userid, module, cmid
+            ) as temp
+            GROUP BY userid
+            ORDER by userid";
+    }
+    $resultado = $DB->get_records_sql($sql, $params);
+    return($resultado);
 }

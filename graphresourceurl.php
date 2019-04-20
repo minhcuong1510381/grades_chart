@@ -259,15 +259,16 @@ $event->trigger();
 <!doctype html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Biểu đồ phân tích</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Biểu đồ số lượt truy cập</title>
     <link rel="stylesheet" href="externalref/jquery-ui-1.12.1/jquery-ui.css">
     <script src="externalref/jquery-1.12.2.js"></script>
     <script src="externalref/jquery-ui-1.12.1/jquery-ui.js"></script>
     <script src="externalref/highcharts.js"></script>
+    <script src="externalref/no-data-to-display.js"></script>
 
     <style>
         .ui-dialog {
