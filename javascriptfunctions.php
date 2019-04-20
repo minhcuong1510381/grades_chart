@@ -39,13 +39,13 @@ defined('MOODLE_INTERNAL') || die();
         ids = [];
         email = [];
         $.each(alunos, function (ind, val) {
-            nomes += val.nome + ", ";
+            nomes += val.nome + "<br>";
             ids.push(val.userid);
             email.push(val.email);
         });
         var string =
             "<h3>" + titulo + "</h3>" +
-            "<p style='font-size:15px'>" + "Sinh viên: "+nomes + "</p>";
+            "<p style='font-size:15px'>" +"<b>Gồm những sinh viên sau:</b>" + "<br>" +nomes + "</p>";
 
         return string;
     }
