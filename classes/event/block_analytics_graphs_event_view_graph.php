@@ -38,7 +38,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2014 YOUR NAME
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  **/
-class block_analytics_graphs_event_view_graph extends \core\event\base {
+class block_grades_chart_event_view_graph extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_TEACHING;
