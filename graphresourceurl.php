@@ -249,7 +249,7 @@ $groupmembers = array_merge($groupmembers, $groupingmembers);
 $groupmembersjson = json_encode($groupmembers);
 $statistics = json_encode($statistics);
 
-$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+$event = \block_grades_chart\event\block_analytics_graphs_event_view_graph::create(array(
     'objectid' => $course,
     'context' => $context,
     'other' => "graphresourceurl.php",

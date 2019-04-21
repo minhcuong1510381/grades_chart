@@ -81,7 +81,7 @@ $studentswithnoaccess = json_encode($studentswithnoaccess);
 $accessresults = json_encode($accessresults);
 $numberofresourcesresult = json_encode($numberofresourcesresult);
 
-$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+$event = \block_grades_chart\event\block_analytics_graphs_event_view_graph::create(array(
     'objectid' => $course,
     'context' => $context,
     'other' => "hits.php",
