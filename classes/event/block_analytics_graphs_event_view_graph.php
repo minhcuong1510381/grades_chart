@@ -46,7 +46,7 @@ class block_analytics_graphs_event_view_graph extends \core\event\base {
     }
 
     public static function get_name() {
-        return get_string('event_view_graph', 'block_analytics_graphs');
+        return "LA - View graph";
     }
 
     public function get_description() {

@@ -640,7 +640,7 @@ $event->trigger();
 <?php if (count($groupmembers) > 0) { ?>
     <div style="margin: 20px;">
         <select id="group_select">
-            <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
+            <option value="-"><?php  echo json_encode("Tất cả nhóm");?></option>
             <?php    foreach ($groupmembers as $key => $value) { ?>
                 <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
                 <?php

@@ -61,7 +61,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "chat", get_string('typename_chat', 'block_analytics_graphs'));
+                )), "mod" . $num, "chat", "Trò chuyện");
                 $num++;
             }
             if (in_array("choice", $availablemodules)) {
@@ -69,7 +69,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "choice", get_string('typename_choice', 'block_analytics_graphs'));
+                )), "mod" . $num, "choice", "Lựa chọn");
                 $num++;
             }
             if (in_array("feedback", $availablemodules)) {
@@ -77,7 +77,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "feedback", get_string('typename_feedback', 'block_analytics_graphs'));
+                )), "mod" . $num, "feedback", "Phản hồi");
                 $num++;
             }
             if (in_array("forum", $availablemodules)) {
@@ -93,7 +93,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "lesson", get_string('typename_lesson', 'block_analytics_graphs'));
+                )), "mod" . $num, "lesson", "Bài giảng");
                 $num++;
             }
             if (in_array("quiz", $availablemodules)) {
@@ -101,7 +101,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "quiz", get_string('typename_quiz', 'block_analytics_graphs'));
+                )), "mod" . $num, "quiz", "Câu hỏi");
                 $num++;
             }
             if (in_array("scorm", $availablemodules)) {
@@ -109,7 +109,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "scorm", get_string('typename_scorm', 'block_analytics_graphs'));
+                )), "mod" . $num, "scorm", "SCORM");
                 $num++;
             }
             if (in_array("survey", $availablemodules)) {
@@ -117,7 +117,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "survey", get_string('typename_survey', 'block_analytics_graphs'));
+                )), "mod" . $num, "survey", "Khảo sát");
                 $num++;
             }
             if (in_array("wiki", $availablemodules)) {
@@ -125,7 +125,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "wiki", get_string('typename_wiki', 'block_analytics_graphs'));
+                )), "mod" . $num, "wiki", "Wiki");
                 $num++;
             }
             if (in_array("workshop", $availablemodules)) {
@@ -133,7 +133,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "workshop", get_string('typename_workshop', 'block_analytics_graphs'));
+                )), "mod" . $num, "workshop", "Hội thảo");
                 $num++;
             }
 
@@ -144,7 +144,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "book", get_string('typename_book', 'block_analytics_graphs'));
+                )), "mod" . $num, "book", "Sách");
                 $num++;
             }
             if (in_array("resource", $availablemodules)) {
@@ -152,7 +152,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "resource", get_string('typename_resource', 'block_analytics_graphs'));
+                )), "mod" . $num, "resource", "Tài nguyên");
                 $num++;
             }
             if (in_array("folder", $availablemodules)) {
@@ -160,7 +160,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "folder", get_string('typename_folder', 'block_analytics_graphs'));
+                )), "mod" . $num, "folder", "Tập tin");
                 $num++;
             }
             if (in_array("page", $availablemodules)) {
@@ -168,7 +168,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "page", get_string('typename_page', 'block_analytics_graphs'));
+                )), "mod" . $num, "page", "Page");
                 $num++;
             }
             if (in_array("url", $availablemodules)) {
@@ -176,7 +176,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     'width' => 24,
                     'height' => 24,
                     'title' => ''
-                )), "mod" . $num, "url", get_string('typename_url', 'block_analytics_graphs'));
+                )), "mod" . $num, "url", "URL");
                 $num++;
             }
 
