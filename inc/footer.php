@@ -4,6 +4,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.9/js/bootstrap-select.min.js"></script>
 <script src="js/Chart.min.js"></script>
 <script src="js/tablesorter.js"></script>
-<script src="js/radar.js"></script>
+<!--<script src="js/radar.js"></script>-->
 <script src="js/chapter.js"></script>
 <script src="js/style.js"></script>
