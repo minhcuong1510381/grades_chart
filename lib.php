@@ -471,3 +471,18 @@ function block_grades_chart_get_number_of_modules_accessed($course, $estudantes,
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
 }
+function block_grades_chart_check_student_has_grades($studentId){
+    global $DB;
+    $sql = "SELECT SUM(grade) as grades
+            FROM {quiz_grades}
+            WHERE userid = $studentId";
+
+    $res = $DB->get_record_sql($sql);
+
+    if($res->{'grades'} != null){
+        return true;
+    }
+    else{
+        return false;
+    }
+}

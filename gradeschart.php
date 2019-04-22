@@ -39,22 +39,36 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
             <h3>Biểu đồ đánh giá chi tiết năng lực của sinh viên</h3>
         </div>
         <?php if ($_GET["countTopic"]) { ?>
-        <form id="myform" style="margin-top: 20px;">
-            <input type="hidden" id="courseId" name="courseId" value="<?php echo $courseId; ?>">
-            <div class="alert alert-danger" id="alert" role="alert"
-                 style="margin: 0 auto; width: 500px; display: none;">
-                Chọn sinh viên để so sánh không phù hợp.
-            </div>
-            <h5 style="margin: 0 auto; width: 500px;">Chọn sinh viên:</h5>
-            <div class="form-group choose-student" style="margin: 0 auto; width: 500px;">
-                <select class="form-control selectpicker" id="student" name="studentId" data-live-search="true">
-                    <?php foreach ($students as $key => $value) { ?>
-                        <option value="<?php echo $value->{'id'}; ?>">
-                            <?php echo $value->{'lastname'} . " " . $value->{'firstname'}; ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
+            <form id="myform" style="margin-top: 20px;">
+                <input type="hidden" id="courseId" name="courseId" value="<?php echo $courseId; ?>">
+<!--                <div class="alert alert-danger" id="alert" role="alert"-->
+<!--                     style="margin: 0 auto; width: 500px; display: none;">-->
+<!--                    Chọn sinh viên để so sánh không phù hợp.-->
+<!--                </div>-->
+                <h5 style="margin: 0 auto; width: 500px;">Chọn sinh viên:</h5>
+                <div class="input-group choose-student" style="margin: 0 auto; width: 500px;">
+                    <select class="form-control selectpicker" id="student" name="studentId" data-live-search="true">
+                        <?php foreach ($students as $key => $value) { ?>
+                            <option value="<?php echo $value->{'id'}; ?>">
+                                <?php echo $value->{'lastname'} . " " . $value->{'firstname'}; ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="compare">So sánh</button>
+                    </div>
+                </div>
+                <div class="form-group choose-student-compare" style="margin: 0 auto; width: 500px; display: none;"
+                     id="compare-student">
+                    <label>Chọn sinh viên để so sánh:</label>
+                    <select class="form-control selectpicker" id="choose-compare-student" data-live-search="true">
+                        <?php foreach ($students as $key => $value) { ?>
+                            <option value="<?php echo $value->{'id'}; ?>">
+                                <?php echo $value->{'lastname'} . " " . $value->{'firstname'}; ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </div>
                 <div class="choose-topic">
                     <h5 style="margin: 0 auto; width: 500px;">Chọn tiêu chí:</h5>
                     <?php for ($i = 1; $i <= $_GET["countTopic"]; $i++) { ?>
@@ -113,8 +127,8 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
 
                 </div>
 
-        </form>
-        <br>
+            </form>
+            <br>
         <?php } ?>
         <?php if (!$_GET["countTopic"]) { ?>
             <div class="form-inputTopic" style="margin: 0 auto; width: 500px;">
@@ -152,7 +166,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
             var courseId = $('#courseId').val();
             window.location.href = "gradeschart.php?courseId=" + courseId + "&countTopic=" + numberTopic;
         });
-        $('#back').on('click',function () {
+        $('#back').on('click', function () {
             var courseId = $('#courseId').val();
             window.location.href = "gradeschart.php?courseId=" + courseId;
         });
@@ -161,79 +175,184 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
             $('.chart-container').append('<canvas id="mycanvas"><canvas>');
             e.preventDefault();
             var frm = $('#myform');
-            console.log(frm);
             $.ajaxSetup({
                 cache: false
             });
-            $.ajax({
-                type: "POST",
-                url: 'data.php',
-                data: frm.serializeArray(),
-                success: function (data) {
-                    var obj = JSON.parse(data);
-                    if (obj.response == 1) {
-                        alert(obj.msg);
-                        return false;
-                    }
-
-                    var vertex = [];
-                    var score = [];
-                    var ave = [];
-
-                    for (var i in obj) {
-                        vertex.push(obj[i].name);
-                        score.push(obj[i][0].average);
-                        ave.push(5);
-                    }
-                    console.log(score);
-
-                    var options = {
-                        scale: {
-                            ticks: {
-                                beginAtZero: true,
-                                max: 10
-                            }
+            if ($('#compare-student').css("display") == "none") {
+                // alert("abc");return false;
+                $.ajax({
+                    type: "POST",
+                    url: 'data.php',
+                    data: frm.serializeArray(),
+                    success: function (data) {
+                        var obj = JSON.parse(data);
+                        if (obj.response == 1) {
+                            alert(obj.msg);
+                            return false;
                         }
-                    };
 
-                    var chartdata = {
-                        labels: vertex,
-                        datasets: [
-                            {
-                                label: obj[0].user,
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgb(54, 162, 235)',
-                                pointBackgroundColor: 'rgb(54, 162, 235)',
-                                pointBorderColor: '#fff',
-                                pointHoverBackgroundColor: '#fff',
-                                pointHoverBorderColor: 'rgb(54, 162, 235)',
-                                data: score,
-                                fill: true,
-                            },
-                            {
-                                label: "Trung bình",
-                                borderColor: 'rgb(255, 0, 0)',
-                                backgroundColor: 'rgba(255, 255, 255, 0)',
-                                borderWidth: '1',
-                                pointStyle: 'cross',
-                                data: ave,
-                                fill: true,
+                        var vertex = [];
+                        var score = [];
+                        var ave = [];
+
+                        for (var i in obj) {
+                            vertex.push(obj[i].name);
+                            score.push(obj[i][0].average);
+                            ave.push(5);
+                        }
+
+
+                        var options = {
+                            scale: {
+                                ticks: {
+                                    beginAtZero: true,
+                                    max: 10
+                                }
                             }
-                        ]
-                    };
+                        };
 
-                    $(".chart-container").css("display", "block");
+                        var chartdata = {
+                            labels: vertex,
+                            datasets: [
+                                {
+                                    label: obj[0].user,
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderColor: 'rgb(54, 162, 235)',
+                                    pointBackgroundColor: 'rgb(54, 162, 235)',
+                                    pointBorderColor: '#fff',
+                                    pointHoverBackgroundColor: '#fff',
+                                    pointHoverBorderColor: 'rgb(54, 162, 235)',
+                                    data: score,
+                                    fill: true,
+                                },
+                                {
+                                    label: "Trung bình",
+                                    borderColor: 'rgb(255, 0, 0)',
+                                    backgroundColor: 'rgba(255, 255, 255, 0)',
+                                    borderWidth: '1',
+                                    pointStyle: 'cross',
+                                    data: ave,
+                                    fill: true,
+                                }
+                            ]
+                        };
 
-                    var ctx = $("#mycanvas");
+                        $(".chart-container").css("display", "block");
 
-                    var barGraph = new Chart(ctx, {
-                        type: 'radar',
-                        data: chartdata,
-                        options: options,
-                    });
+                        var ctx = $("#mycanvas");
 
+                        var barGraph = new Chart(ctx, {
+                            type: 'radar',
+                            data: chartdata,
+                            options: options,
+                        });
+
+                    }
+                });
+            } else {
+                var studentIdCheck = $('#student').val();
+                var studentIdCpCheck = $('#choose-compare-student').val();
+
+                if (studentIdCheck == studentIdCpCheck) {
+                    alert("Chọn sinh viên so sánh không phù hợp");
                 }
-            });
+                else{
+                    $.ajax({
+                        type: "POST",
+                        url: 'data.php',
+                        data: frm.serializeArray(),
+                        success: function (data) {
+                            var obj = JSON.parse(data);
+                            console.log(obj);
+
+                            var vertex = [];
+                            var score = [];
+                            var ave = [];
+                            var vertexCp = [];
+                            var scoreCp = [];
+
+                            for (var i in obj[0]) {
+                                vertex.push(obj[0][i].name);
+                                score.push(obj[0][i][0].average);
+                                ave.push(5);
+                            }
+
+                            for (var i in obj[1]) {
+                                vertexCp.push(obj[1][i].name);
+                                scoreCp.push(obj[1][i][0].average);
+                            }
+
+                            var options = {
+                                scale: {
+                                    ticks: {
+                                        beginAtZero: true,
+                                        max: 10
+                                    }
+                                }
+                            };
+
+                            var chartdata = {
+                                labels: vertex,
+                                datasets: [
+                                    {
+                                        label: obj[0][0].user,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                        borderColor: 'rgb(54, 162, 235)',
+                                        pointBackgroundColor: 'rgb(54, 162, 235)',
+                                        pointBorderColor: '#fff',
+                                        pointHoverBackgroundColor: '#fff',
+                                        pointHoverBorderColor: 'rgb(54, 162, 235)',
+                                        data: score,
+                                        fill: true,
+                                    },
+                                    {
+                                        label: obj[1][0].user,
+                                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                        borderColor: 'rgb(255, 99, 132)',
+                                        pointBackgroundColor: 'rgb(255, 99, 132)',
+                                        pointBorderColor: '#fff',
+                                        pointHoverBackgroundColor: '#fff',
+                                        pointHoverBorderColor: 'rgb(255, 99, 132)',
+                                        data: scoreCp,
+                                        fill: true,
+                                    },
+                                    {
+                                        label: "Trung bình",
+                                        borderColor: 'rgba(255, 0, 0, 0.5)',
+                                        backgroundColor: 'rgba(255, 255, 255, 0)',
+                                        borderWidth: '1',
+                                        pointStyle: 'cross',
+                                        data: ave,
+                                        fill: true,
+                                    }
+                                ]
+                            };
+
+                            $(".chart-container").css("display", "block");
+
+                            var ctx = $("#mycanvas");
+
+                            var barGraph = new Chart(ctx, {
+                                type: 'radar',
+                                data: chartdata,
+                                options: options,
+                            });
+
+                        }
+                    });
+                }
+            }
+
+        });
+
+        $('#compare').click(function (e) {
+            if ($('#compare-student').css("display") == "none") {
+                $('#compare-student').css("display", "block");
+                $('#choose-compare-student').attr('name', 'compareStudentId');
+            } else {
+                $('#compare-student').css("display", "none");
+                $('#choose-compare-student').removeAttr('name');
+            }
         });
     });
 </script>

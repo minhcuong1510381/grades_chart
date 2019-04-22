@@ -7,56 +7,83 @@ require("lib.php");
 //
 $courseId = $_POST['courseId'];
 $studentId = $_POST['studentId'];
+$studentIdCompare = $_POST['compareStudentId'];
+
 $sqlUser = "SELECT firstname, lastname, id
 			FROM {user}
 			WHERE id = $studentId";
 $user = $DB->get_record_sql($sqlUser);
+
+
+if ($studentIdCompare) {
+    $sqlUserCp = "SELECT firstname, lastname, id
+			FROM {user}
+			WHERE id = $studentIdCompare";
+    $userCp = $DB->get_record_sql($sqlUserCp);
+
+    $resCp = [];
+
+    $check1 = block_grades_chart_check_student_has_grades($studentIdCompare);
+
+    if ($check1 == false) {
+        print json_encode(["msg" => "Sinh viên " . $userCp->{'lastname'} . " " . $userCp->{'firstname'} . " không có điểm", "response" => 1]);
+        return false;
+    }
+}
+
 $topic = $_POST['topic'];
 $c = 0;
-$aGrade = [];
 $res = [];
-//foreach($topic as $t){
-//    if($t['name'] != ""){
-//        $aName[] = $t['name'];
-//        $c++;
-//    }
-//}
-//foreach ($idQuiz as $k => $v){
-//
-//}
+
+$check = block_grades_chart_check_student_has_grades($studentId);
+
+if ($check == false) {
+    print json_encode(["msg" => "Sinh viên " . $user->{'lastname'} . " " . $user->{'firstname'} . " không có điểm", "response" => 1]);
+    return false;
+}
+
 foreach ($topic as $key => $t) {
     if ($t != "") {
         $c++;
-        if($_POST['idQuiz'][$key]){
+        if ($_POST['idQuiz'][$key]) {
             $aQuizId = implode(",", $_POST['idQuiz'][$key]);
-        }
-        else{
-            print json_encode(["msg"=>"Tiêu chí thứ ".$key." không có dữ liệu", "response" => 1]);
+        } else {
+            print json_encode(["msg" => "Tiêu chí thứ " . $key . " không có dữ liệu", "response" => 1]);
             return false;
         }
-        if($aQuizId){
+        if ($aQuizId) {
             $q = "SELECT AVG(grade) as average
                 FROM {quiz_grades}
                 WHERE userid = $studentId AND quiz IN ($aQuizId)";
 
-            $res[] = block_grades_chart_convert_to_array($DB->get_records_sql($q)) + ["name" => $t, "user"=>$user->{'lastname'} . " " . $user->{'firstname'}];
+            $res[] = block_grades_chart_convert_to_array($DB->get_records_sql($q)) + ["name" => $t, "user" => $user->{'lastname'} . " " . $user->{'firstname'}];
+
+            if ($studentIdCompare) {
+                $qCp = "SELECT AVG(grade) as average
+                FROM {quiz_grades}
+                WHERE userid = $studentIdCompare AND quiz IN ($aQuizId)";
+
+                $resCp[] = block_grades_chart_convert_to_array($DB->get_records_sql($qCp)) + ["name" => $t, "user" => $userCp->{'lastname'} . " " . $userCp->{'firstname'}];
+
+            }
         }
+    } else {
+        $msg = ["msg" => "Tên của tiêu chí " . $key . " chưa được thêm", "response" => 1];
+        print json_encode($msg);
+        return false;
     }
 }
-if ($c < count($topic)) {
-    $msg = ["msg" => "Tên của các tiêu chí chưa được thêm", "response" => 1];
-    print json_encode($msg);
+if ($studentIdCompare) {
+    print json_encode(array($res, $resCp));
 } else {
     print json_encode($res);
 }
-
-//print json_encode($topic);
 //$studentIdCompare = $_POST['compareStudentId'];
 //
-$sqlUser = "SELECT firstname, lastname, id
-			FROM {user}
-			WHERE id = $studentId";
-$user = $DB->get_record_sql($sqlUser);
+//$sqlUser = "SELECT firstname, lastname, id
+//			FROM {user}
+//			WHERE id = $studentId";
+//$user = $DB->get_record_sql($sqlUser);
 //
 //if ($studentIdCompare) {
 //    $sqlUserCp = "SELECT firstname, lastname, id
