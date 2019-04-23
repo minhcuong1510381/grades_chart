@@ -41,10 +41,10 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
         <?php if ($_GET["countTopic"]) { ?>
             <form id="myform" style="margin-top: 20px;">
                 <input type="hidden" id="courseId" name="courseId" value="<?php echo $courseId; ?>">
-<!--                <div class="alert alert-danger" id="alert" role="alert"-->
-<!--                     style="margin: 0 auto; width: 500px; display: none;">-->
-<!--                    Chọn sinh viên để so sánh không phù hợp.-->
-<!--                </div>-->
+                <!--                <div class="alert alert-danger" id="alert" role="alert"-->
+                <!--                     style="margin: 0 auto; width: 500px; display: none;">-->
+                <!--                    Chọn sinh viên để so sánh không phù hợp.-->
+                <!--                </div>-->
                 <h5 style="margin: 0 auto; width: 500px;">Chọn sinh viên:</h5>
                 <div class="input-group choose-student" style="margin: 0 auto; width: 500px;">
                     <select class="form-control selectpicker" id="student" name="studentId" data-live-search="true">
@@ -95,17 +95,17 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                                     </div>
 
                                     <!-- Modal body -->
-                                    <div class="modal-body">
-                                        <?php foreach ($aQuiz as $k => $v) { ?>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input"
-                                                       id="choiceData[<?php echo $i; ?>][<?php echo $v->{'id'}; ?>]"
-                                                       name="idQuiz[<?php echo $i; ?>][<?php echo $v->{'id'}; ?>]"
-                                                       value="<?php echo $v->{'id'}; ?>">
-                                                <label class="form-check-label"
-                                                       for="choiceData[<?php echo $i; ?>][<?php echo $v->{'id'}; ?>]"><?php echo $v->{'name'}; ?></label>
-                                            </div>
-                                        <?php } ?>
+                                    <div class="modal-body data-box">
+                                        <ul class="ks-cboxtags">
+                                            <?php foreach ($aQuiz as $k => $v) { ?>
+                                                <li><input type="checkbox"
+                                                           id="choiceData[<?php echo $i; ?>][<?php echo $v->{'id'}; ?>]"
+                                                           name="idQuiz[<?php echo $i; ?>][<?php echo $v->{'id'}; ?>]"
+                                                           value="<?php echo $v->{'id'}; ?>"><label
+                                                            for="choiceData[<?php echo $i; ?>][<?php echo $v->{'id'}; ?>]"><?php echo $v->{'name'}; ?></label>
+                                                </li>
+                                            <?php } ?>
+                                        </ul>
                                     </div>
 
                                     <!-- Modal footer -->
@@ -255,8 +255,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
 
                 if (studentIdCheck == studentIdCpCheck) {
                     alert("Chọn sinh viên so sánh không phù hợp");
-                }
-                else{
+                } else {
                     $.ajax({
                         type: "POST",
                         url: 'data.php',
@@ -307,12 +306,12 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                                     },
                                     {
                                         label: obj[1][0].user,
-                                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                        borderColor: 'rgb(255, 99, 132)',
-                                        pointBackgroundColor: 'rgb(255, 99, 132)',
+                                        backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                                        borderColor: 'rgb(255, 205, 86)',
+                                        pointBackgroundColor: 'rgb(255, 205, 86)',
                                         pointBorderColor: '#fff',
                                         pointHoverBackgroundColor: '#fff',
-                                        pointHoverBorderColor: 'rgb(255, 99, 132)',
+                                        pointHoverBorderColor: 'rgb(255, 205, 86)',
                                         data: scoreCp,
                                         fill: true,
                                     },
