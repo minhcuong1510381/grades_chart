@@ -97,6 +97,7 @@ $event->trigger();
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Biểu đồ phân phối truy cập</title>
+    <link rel="shortcut icon" href="img/favicon.ico">
     <link rel="stylesheet" href="externalref/jquery-ui-1.12.1/jquery-ui.css">
     <script src="externalref/jquery-1.12.2.js"></script>
     <script src="externalref/jquery-ui-1.12.1/jquery-ui.js"></script>

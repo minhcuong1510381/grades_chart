@@ -86,7 +86,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                         <!-- The Modal -->
                         <div class="modal" id="myModal[<?php echo $i; ?>]">
                             <div class="modal-dialog">
-                                <div class="modal-content">
+                                <div class="modal-content" style="width: 600px;">
 
                                     <!-- Modal Header -->
                                     <div class="modal-header">
@@ -147,12 +147,12 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
 
     </div>
 
-    <div class="chart-container" style="display: none; width: 800px;">
-        <canvas id="mycanvas" style="width: 800px"></canvas>
-    </div>
+    <div id="chart1" style="min-width: 360px; max-width: 600px; height: 400px; margin: 0 auto;"></div>
 </div>
 
 <?php include('inc/footer.php') ?>
+<script src="externalref/highcharts.js"></script>
+<script src="externalref/highcharts-more.js"></script>
 <script>
     $(document).ready(function () {
         $('#setting').on('click', function () {
@@ -171,8 +171,6 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
             window.location.href = "gradeschart.php?courseId=" + courseId;
         });
         $('#myform').on('submit', function (e) {
-            $('#mycanvas').remove();
-            $('.chart-container').append('<canvas id="mycanvas"><canvas>');
             e.preventDefault();
             var frm = $('#myform');
             $.ajaxSetup({
@@ -197,56 +195,63 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
 
                         for (var i in obj) {
                             vertex.push(obj[i].name);
-                            score.push(obj[i][0].average);
+                            score.push(parseInt(obj[i][0].average));
                             ave.push(5);
                         }
-
-
-                        var options = {
-                            scale: {
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 10
-                                }
-                            }
-                        };
-
-                        var chartdata = {
-                            labels: vertex,
-                            datasets: [
-                                {
-                                    label: obj[0].user,
-                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                    borderColor: 'rgb(54, 162, 235)',
-                                    pointBackgroundColor: 'rgb(54, 162, 235)',
-                                    pointBorderColor: '#fff',
-                                    pointHoverBackgroundColor: '#fff',
-                                    pointHoverBorderColor: 'rgb(54, 162, 235)',
-                                    data: score,
-                                    fill: true,
-                                },
-                                {
-                                    label: "Trung bình",
-                                    borderColor: 'rgb(255, 0, 0)',
-                                    backgroundColor: 'rgba(255, 255, 255, 0)',
-                                    borderWidth: '1',
-                                    pointStyle: 'cross',
-                                    data: ave,
-                                    fill: true,
-                                }
-                            ]
-                        };
-
-                        $(".chart-container").css("display", "block");
-
-                        var ctx = $("#mycanvas");
-
-                        var barGraph = new Chart(ctx, {
-                            type: 'radar',
-                            data: chartdata,
-                            options: options,
+                        var chartype = {
+                            polar: true,
+                            type: 'line'
+                        }
+                        var chartitle = {
+                            text: 'Biểu đồ năng lực sinh viên',
+                            x: -80
+                        }
+                        var chartpane = {
+                            size: '80%'
+                        }
+                        var chartxaxis = {
+                            categories: vertex,
+                            tickmarkPlacement: 'on',
+                            lineWidth: 0
+                        }
+                        var chartyaxis = {
+                            gridLineInterpolation: 'polygon',
+                            lineWidth: 0,
+                            min: 0,
+                            max: 10
+                        }
+                        var chartooltip = {
+                            shared: true,
+                            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f} điểm</b><br/>'
+                        }
+                        var chartlegend = {
+                            align: 'right',
+                            verticalAlign: 'top',
+                            y: 70,
+                            layout: 'vertical'
+                        }
+                        var chartseries = [{
+                            name: obj[0].user,
+                            data: score,
+                            color: '#7cb5ec',
+                            pointPlacement: 'on'
+                        }, {
+                            name: 'Trung bình',
+                            data: ave,
+                            color: '#FF0000',
+                            lineWidth: 1,
+                            pointPlacement: 'on'
+                        }]
+                        $('#chart1').highcharts({
+                            chart:chartype,
+                            title: chartitle,
+                            pane:chartpane,
+                            xAxis: chartxaxis,
+                            yAxis:chartyaxis,
+                            tooltip: chartooltip,
+                            legend:chartlegend,
+                            series: chartseries
                         });
-
                     }
                 });
             } else {
@@ -272,69 +277,72 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
 
                             for (var i in obj[0]) {
                                 vertex.push(obj[0][i].name);
-                                score.push(obj[0][i][0].average);
+                                score.push(parseInt(obj[0][i][0].average));
                                 ave.push(5);
                             }
 
                             for (var i in obj[1]) {
                                 vertexCp.push(obj[1][i].name);
-                                scoreCp.push(obj[1][i][0].average);
+                                scoreCp.push(parseInt(obj[1][i][0].average));
                             }
-
-                            var options = {
-                                scale: {
-                                    ticks: {
-                                        beginAtZero: true,
-                                        max: 10
-                                    }
-                                }
-                            };
-
-                            var chartdata = {
-                                labels: vertex,
-                                datasets: [
-                                    {
-                                        label: obj[0][0].user,
-                                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                        borderColor: 'rgb(54, 162, 235)',
-                                        pointBackgroundColor: 'rgb(54, 162, 235)',
-                                        pointBorderColor: '#fff',
-                                        pointHoverBackgroundColor: '#fff',
-                                        pointHoverBorderColor: 'rgb(54, 162, 235)',
-                                        data: score,
-                                        fill: true,
-                                    },
-                                    {
-                                        label: obj[1][0].user,
-                                        backgroundColor: 'rgba(255, 205, 86, 0.2)',
-                                        borderColor: 'rgb(255, 205, 86)',
-                                        pointBackgroundColor: 'rgb(255, 205, 86)',
-                                        pointBorderColor: '#fff',
-                                        pointHoverBackgroundColor: '#fff',
-                                        pointHoverBorderColor: 'rgb(255, 205, 86)',
-                                        data: scoreCp,
-                                        fill: true,
-                                    },
-                                    {
-                                        label: "Trung bình",
-                                        borderColor: 'rgba(255, 0, 0, 0.5)',
-                                        backgroundColor: 'rgba(255, 255, 255, 0)',
-                                        borderWidth: '1',
-                                        pointStyle: 'cross',
-                                        data: ave,
-                                        fill: true,
-                                    }
-                                ]
-                            };
-
-                            $(".chart-container").css("display", "block");
-
-                            var ctx = $("#mycanvas");
-
-                            var barGraph = new Chart(ctx, {
-                                type: 'radar',
-                                data: chartdata,
-                                options: options,
+                            var chartype = {
+                                polar: true,
+                                type: 'line'
+                            }
+                            var chartitle = {
+                                text: 'Biểu đồ năng lực sinh viên',
+                                x: -80
+                            }
+                            var chartpane = {
+                                size: '80%'
+                            }
+                            var chartxaxis = {
+                                categories: vertex,
+                                tickmarkPlacement: 'on',
+                                lineWidth: 0
+                            }
+                            var chartyaxis = {
+                                gridLineInterpolation: 'polygon',
+                                lineWidth: 0,
+                                min: 0,
+                                max: 10
+                            }
+                            var chartooltip = {
+                                shared: true,
+                                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f} điểm</b><br/>'
+                            }
+                            var chartlegend = {
+                                align: 'right',
+                                verticalAlign: 'top',
+                                y: 70,
+                                layout: 'vertical'
+                            }
+                            var chartseries = [{
+                                name: obj[0][0].user,
+                                data: score,
+                                color: '#7cb5ec',
+                                pointPlacement: 'on'
+                            }, {
+                                name: obj[1][0].user,
+                                data: scoreCp,
+                                color: '#00FF00',
+                                pointPlacement: 'on'
+                            },{
+                                name: 'Trung bình',
+                                data: ave,
+                                color: '#FF0000',
+                                lineWidth: 1,
+                                pointPlacement: 'on'
+                            }]
+                            $('#chart1').highcharts({
+                                chart:chartype,
+                                title: chartitle,
+                                pane:chartpane,
+                                xAxis: chartxaxis,
+                                yAxis:chartyaxis,
+                                tooltip: chartooltip,
+                                legend:chartlegend,
+                                series: chartseries
                             });
 
                         }
