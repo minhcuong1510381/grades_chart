@@ -20,6 +20,11 @@ if ($isStudent == 1) {
 }
 
 $students = block_grades_chart_get_students($courseId);
+$numberofstudents = count($students);
+if ($numberofstudents == 0) {
+    echo("Không có sinh viên trong khóa học");
+    exit;
+}
 
 $query = "SELECT name, id
         FROM {quiz}
@@ -41,10 +46,9 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
         <?php if ($_GET["countTopic"]) { ?>
             <form id="myform" style="margin-top: 20px;">
                 <input type="hidden" id="courseId" name="courseId" value="<?php echo $courseId; ?>">
-                <!--                <div class="alert alert-danger" id="alert" role="alert"-->
-                <!--                     style="margin: 0 auto; width: 500px; display: none;">-->
-                <!--                    Chọn sinh viên để so sánh không phù hợp.-->
-                <!--                </div>-->
+                <div class="alert alert-danger" id="alert" role="alert"
+                        style="margin: 0 auto; width: 500px; display: none;">
+                </div>
                 <h5 style="margin: 0 auto; width: 500px;">Chọn sinh viên:</h5>
                 <div class="input-group choose-student" style="margin: 0 auto; width: 500px;">
                     <select class="form-control selectpicker" id="student" name="studentId" data-live-search="true">
@@ -131,6 +135,9 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
             <br>
         <?php } ?>
         <?php if (!$_GET["countTopic"]) { ?>
+            <div class="alert alert-danger" id="alert" role="alert"
+                    style="margin: 0 auto; width: 500px; display: none;">
+            </div>
             <div class="form-inputTopic" style="margin: 0 auto; width: 500px;">
                 <input type="hidden" id="courseId" name="courseId" value="<?php echo $courseId; ?>">
                 <h5>Điền vào số tiêu chí cần thiết lập:</h5>
@@ -160,7 +167,11 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
             // $('.group-setting').css('display',"none");
             var numberTopic = $('#numberTopic').val();
             if (numberTopic < 3) {
-                alert("Cần thiết lập ít nhất 3 tiêu chí");
+                $('#alert').html("Cần thiết lập ít nhất 3 tiêu chí");
+
+                $('#alert').css("display", "block");
+
+                $('#alert').delay(3000).fadeOut("slow");
                 return false;
             }
             var courseId = $('#courseId').val();
@@ -185,7 +196,12 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                     success: function (data) {
                         var obj = JSON.parse(data);
                         if (obj.response == 1) {
-                            alert(obj.msg);
+                            // alert(obj.msg);
+                            $('#alert').html(obj.msg);
+
+                            $('#alert').css("display", "block");
+
+                            $('#alert').delay(3000).fadeOut("slow");
                             return false;
                         }
 
@@ -259,7 +275,12 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                 var studentIdCpCheck = $('#choose-compare-student').val();
 
                 if (studentIdCheck == studentIdCpCheck) {
-                    alert("Chọn sinh viên so sánh không phù hợp");
+                    $('#alert').html("Chọn sinh viên so sánh không phù hợp!");
+
+                    $('#alert').css("display", "block");
+
+                    $('#alert').delay(3000).fadeOut("slow");
+                    return false;
                 } else {
                     $.ajax({
                         type: "POST",
@@ -268,6 +289,16 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                         success: function (data) {
                             var obj = JSON.parse(data);
                             console.log(obj);
+
+                            if (obj.response == 1) {
+                                // alert(obj.msg);
+                                $('#alert').html(obj.msg);
+
+                                $('#alert').css("display", "block");
+
+                                $('#alert').delay(3000).fadeOut("slow");
+                                return false;
+                            }
 
                             var vertex = [];
                             var score = [];

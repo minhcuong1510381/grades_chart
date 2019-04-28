@@ -18,13 +18,13 @@ if (isset($_POST['btn-submit'])) {
                 $record->questionid = $key;
                 $record->instruction = $value;
                 $DB->insert_record('block_grades_chart', $record);
-                header("Location: addinstruction.php?courseId=".$courseId);
+                header("Location: addinstruction.php?courseId=".$courseId."&response=0");
             }
         } else {
             $record = $DB->get_record('block_grades_chart', array('questionid' => $key));
             $record->instruction = $value;
             $DB->update_record('block_grades_chart', $record);
-            header("Location: addinstruction.php?courseId=".$courseId);
+            header("Location: addinstruction.php?courseId=".$courseId."&response=1");
         }
     }
 }

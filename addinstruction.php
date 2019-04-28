@@ -19,6 +19,14 @@ $isStudent = current(get_user_roles($context, $USER->id))->shortname == 'student
 if ($isStudent == 1) {
     return false;
 }
+
+$students = block_grades_chart_get_students($courseId);
+$numberofstudents = count($students);
+if ($numberofstudents == 0) {
+    echo("Không có sinh viên trong khóa học");
+    exit;
+}
+
 $query = "SELECT question.questiontext, question.id as questionid, quiz.name, quiz.id as quizid
             FROM {question} question
             INNER JOIN {quiz_slots} qs ON qs.questionid = question.id
@@ -41,6 +49,19 @@ $result = groupArray($aQuiz, "quizid");
         </div>
     </div>
     <div class="content" style="margin-top: 30px;">
+        <?php if($_GET['response'] == 1) { ?>
+        <div class="alert alert-success" id="alert" role="alert"
+                    style="margin: 0 auto; width: 700px; display: none;">
+            Chỉnh sửa tài liệu tham khảo thành công
+        </div>
+        <?php } ?>
+        <?php if($_GET['response'] == 0) { ?>
+        <div class="alert alert-success" id="alert" role="alert"
+                    style="margin: 0 auto; width: 700px; display: none;">
+            Thêm tài liệu tham khảo thành công
+        </div>
+        <?php } ?>
+        <br>
         <table class="table table-bordered" style="width: 700px; margin: 0 auto;">
             <thead>
             <tr>
@@ -97,6 +118,7 @@ $result = groupArray($aQuiz, "quizid");
                 <button type="button" class="btn btn-primary">Trở về khóa học</button>
             </a>
         </div>
+        <br>
     </div>
 </div>
 
@@ -104,6 +126,11 @@ $result = groupArray($aQuiz, "quizid");
 <script>
     $(document).ready(function () {
         $('[data-toggle="collapse"]').tooltip();
+        if(<?php echo $_GET['response']; ?> == 1 || <?php echo $_GET['response']; ?> == 0){
+            $('#alert').css("display", "block");
+
+            $('#alert').delay(3000).fadeOut("slow");
+        }
     });
 </script>
 </body>
