@@ -31,6 +31,25 @@ $aQuiz = json_decode(json_encode(block_grades_chart_convert_to_array($quiz)), Tr
 
 $result = groupArray($aQuiz, "quizid");
 
+
+ function getInstruction($questionid) {
+    global $DB;
+    $query = "SELECT bgc.questionid, bgc.instruction
+        FROM {block_grades_chart} bgc";
+    $aInstruction = block_grades_chart_convert_to_array($DB->get_records_sql($query));
+
+    foreach ($aInstruction as $key => $value) {
+        if ($aInstruction[$key]->{'questionid'} == $questionid) {
+            return $aInstruction[$key]->{'instruction'};
+        }
+    }
+    return 0;
+}
+
+/*echo "<pre>";
+print_r($result);
+die;*/
+
 ?>
 <?php include('inc/header.php') ?>
 <div class="container">
@@ -60,36 +79,39 @@ $result = groupArray($aQuiz, "quizid");
             <?php } ?>
             </tbody>
         </table>
-        <?php foreach ($result as $key => $row) { ?>
-            <div id="myModal[<?php echo $key; ?>]" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4>Thêm chi tiết hướng dẫn các câu hỏi</h4>
-                        </div>
-                        <?php foreach ($row as $k => $v) { ?>
-                            <div class="modal-body">
-                                <a data-toggle="collapse" data-html="true" data-placement="right"
-                                   href="#cauhoi[<?php echo $k; ?>]" role="button" aria-expanded="false"
-                                   title="<?php echo htmlentities($v['questiontext']); ?>">
-                                    Câu hỏi thứ <?php echo $k + 1; ?>
-                                </a>
-                                <textarea class="collapse" name="bai[<?php echo $key; ?>]-cau[<?php echo $k; ?>]"
-                                          style="width: 100%;" id="cauhoi[<?php echo $k; ?>]"></textarea>
+        <form action="postInstruction.php" method="post">
+            <?php foreach ($result as $key => $row) { ?>
+                <div id="myModal[<?php echo $key; ?>]" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4>Thêm chi tiết hướng dẫn các câu hỏi</h4>
                             </div>
-                        <?php } ?>
-
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger" data-dismiss="modal">Xác nhận</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            <?php foreach ($row as $k => $v) { ?>
+                                <div class="modal-body">
+                                    <a data-toggle="collapse" data-html="true" data-placement="right"
+                                       href="#cauhoi[<?php echo $k; ?>]" role="button" aria-expanded="false"
+                                       title="<?php echo htmlentities($v['questiontext']); ?>">
+                                        Câu hỏi thứ <?php echo $k + 1; ?>
+                                    </a>
+                                    <textarea class="collapse" name="questionId[<?php echo($row[$k]['questionid']) ?>]"
+                                              style="width: 100%;" id="cauhoi[<?php echo $k; ?>]">
+                                    <?php 
+                                        echo getInstruction($row[$k]['questionid']);
+                                    ?>              
+                                    </textarea>
+                                </div>
+                            <?php } ?>
+                            <div class="modal-footer">
+                                <button type="submit" name="btn-submit" class="btn btn-danger">Xác nhận</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
-        <?php } ?>
+            <?php } ?>
+        </form>
         <div class="redirect-course" style="margin: 0 auto; width: 500px; text-align: center; margin-top: 20px;">
             <a href="<?php echo $CFG->wwwroot . '/course/view.php?id=' . $courseId; ?>">
                 <button type="button" class="btn btn-primary">Trở về khóa học</button>
