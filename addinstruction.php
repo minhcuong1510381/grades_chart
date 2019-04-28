@@ -32,24 +32,6 @@ $aQuiz = json_decode(json_encode(block_grades_chart_convert_to_array($quiz)), Tr
 $result = groupArray($aQuiz, "quizid");
 
 
- function getInstruction($questionid) {
-    global $DB;
-    $query = "SELECT bgc.questionid, bgc.instruction
-        FROM {block_grades_chart} bgc";
-    $aInstruction = block_grades_chart_convert_to_array($DB->get_records_sql($query));
-
-    foreach ($aInstruction as $key => $value) {
-        if ($aInstruction[$key]->{'questionid'} == $questionid) {
-            return $aInstruction[$key]->{'instruction'};
-        }
-    }
-    return 0;
-}
-
-/*echo "<pre>";
-print_r($result);
-die;*/
-
 ?>
 <?php include('inc/header.php') ?>
 <div class="container">
@@ -80,6 +62,7 @@ die;*/
             </tbody>
         </table>
         <form action="postInstruction.php" method="post">
+            <input type="hidden" name="courseId" value="<?php echo $courseId; ?>">
             <?php foreach ($result as $key => $row) { ?>
                 <div id="myModal[<?php echo $key; ?>]" class="modal fade" role="dialog">
                     <div class="modal-dialog">
@@ -96,11 +79,8 @@ die;*/
                                         Câu hỏi thứ <?php echo $k + 1; ?>
                                     </a>
                                     <textarea class="collapse" name="questionId[<?php echo($row[$k]['questionid']) ?>]"
-                                              style="width: 100%;" id="cauhoi[<?php echo $k; ?>]">
-                                    <?php 
-                                        echo getInstruction($row[$k]['questionid']);
-                                    ?>              
-                                    </textarea>
+                                              style="width: 100%;"
+                                              id="cauhoi[<?php echo $k; ?>]"><?php echo block_grades_chart_get_instruction($row[$k]['questionid']); ?></textarea>
                                 </div>
                             <?php } ?>
                             <div class="modal-footer">

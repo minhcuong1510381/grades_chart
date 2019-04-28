@@ -486,3 +486,32 @@ function block_grades_chart_check_student_has_grades($studentId){
         return false;
     }
 }
+
+function block_grades_chart_get_instruction($questionid)
+{
+    global $DB;
+    $query = "SELECT bgc.questionid, bgc.instruction
+        FROM {block_grades_chart} bgc";
+    $aInstruction = block_grades_chart_convert_to_array($DB->get_records_sql($query));
+
+    foreach ($aInstruction as $key => $value) {
+        if ($aInstruction[$key]->{'questionid'} == $questionid) {
+            return $aInstruction[$key]->{'instruction'};
+        }
+    }
+    return null;
+}
+
+function block_grades_chart_get_check_id($questionid) {
+    global $DB;
+    $query = "SELECT bgc.questionid, bgc.instruction
+        FROM {block_grades_chart} bgc";
+    $aInstruction = block_grades_chart_convert_to_array($DB->get_records_sql($query));
+
+    foreach ($aInstruction as $key => $value) {
+        if ($aInstruction[$key]->{'questionid'} == $questionid) {
+            return 0;
+        }
+    }
+    return 1;
+}

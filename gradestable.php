@@ -63,7 +63,7 @@ foreach ($aQuiz as $key => $value) {
             unset($qrArr[$k]);
         }
     }
-    $result[] = ["state" => $value->{'state'}, "questionsummary" => $value->{'questionsummary'}, "rightanswer" => $value->{'rightanswer'}, "responsesummary" => $value->{'responsesummary'}, "nameQuiz" => $quiz1[$key][0]->{'name'}, "idQuiz" => $quiz1[$key][0]->{'id'}];
+    $result[] = ["questionId" => $value->{'questionid'}, "state" => $value->{'state'}, "questionsummary" => $value->{'questionsummary'}, "rightanswer" => $value->{'rightanswer'}, "responsesummary" => $value->{'responsesummary'}, "nameQuiz" => $quiz1[$key][0]->{'name'}, "idQuiz" => $quiz1[$key][0]->{'id'}];
 }
 
 foreach ($qrArr as $q) {
@@ -71,6 +71,11 @@ foreach ($qrArr as $q) {
 }
 
 $result = groupArray($result, "idQuiz");
+
+$reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+//echo "<pre>";
+//print_r($result);
+//die;
 
 ?>
 <?php include('inc/header.php') ?>
@@ -107,22 +112,54 @@ $result = groupArray($result, "idQuiz");
                         <?php } else { ?>
                             <?php if ($items[$i]) { ?>
                                 <?php if ($items[$i]['state'] == "gradedright") { ?>
-                                    <td><a href="javascript:void(0);" data-toggle="tooltip" data-html="true"
-                                           data-placement="right"
-                                           title="<?php echo '***Câu hỏi là: ' . '&#013;' . htmlentities($items[$i]['questionsummary']) . '&#013;' . '***Câu trả lời của bạn: ' . htmlentities($items[$i]['responsesummary']) . '&#013;' . '***Đáp án: ' . htmlentities($items[$i]['rightanswer']); ?>"><i
+                                    <td><a href="javascript:void(0);" data-toggle="modal"
+                                           data-target="#myModal-[<?php echo $items[$i]['questionId'] ?>]"><i
                                                     class="fa fa-check"></i></a></td>
                                 <?php } else { ?>
-                                    <td><a href="javascript:void(0);" data-toggle="tooltip" data-html="true"
-                                           data-placement="right"
-                                           title="<?php echo '***Câu hỏi là: ' . '&#013;' . htmlentities($items[$i]['questionsummary']) . '&#013;' . '***Câu trả lời của bạn: ' . htmlentities($items[$i]['responsesummary']) . '&#013;' . '***Đáp án: ' . htmlentities($items[$i]['rightanswer']); ?>"><i
+                                    <td><a href="javascript:void(0);" data-toggle="modal"
+                                           data-target="#myModal-[<?php echo $items[$i]['questionId'] ?>]"><i
                                                     class="fa fa-times"></i></a></td>
                                 <?php } ?>
                             <?php } else { ?>
                                 <td>-</td>
                             <?php } ?>
                         <?php } ?>
+                        <div class="modal" id="myModal-[<?php echo $items[$i]['questionId'] ?>]">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Hướng dẫn</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <b>Câu hỏi là:</b>
+                                        <p><?php echo nl2br($items[$i]['questionsummary']); ?></p>
+                                        <b>Câu trả lời của bạn là:</b>
+                                        <p><?php echo nl2br($items[$i]['responsesummary']); ?></p>
+                                        <b>Đáp án là:</b>
+                                        <p><?php echo nl2br($items[$i]['rightanswer']); ?></p>
+                                        <b>Tham khảo</b>
+                                        <?php if(preg_match($reg_exUrl,block_grades_chart_get_instruction($items[$i]['questionId']))){ ?>
+                                        <p><?php echo '<a target="_blank" href="'.block_grades_chart_get_instruction($items[$i]['questionId']).'">'.block_grades_chart_get_instruction($items[$i]['questionId']).'</a>' ?></p>
+                                        <?php } else { ?>
+                                        <p><?php echo block_grades_chart_get_instruction($items[$i]['questionId']); ?></p>
+                                        <?php } ?>
+                                    </div>
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     <?php } ?>
                 </tr>
+
             <?php } ?>
             </tbody>
         </table>
