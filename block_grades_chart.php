@@ -29,7 +29,6 @@ class block_grades_chart extends block_base
         if ($this->content !== null) {
             return $this->content;
         }
-
         $courseId = $_GET['id'];
         $chartURL = new moodle_url('/blocks/grades_chart/gradeschart.php', array('courseId' => $courseId));
         $tableURL = new moodle_url('/blocks/grades_chart/gradestable.php', array('courseId' => $courseId));
@@ -43,13 +42,11 @@ class block_grades_chart extends block_base
             $this->content->text = '<li><a href="' . $tableURL . '" target="_blank">Bảng xem lại khóa học</a></li>';
         } else {
             $this->content->text = '<li><a href="' . $chartURL . '" target="_blank">Biểu đồ năng lực sinh viên</a></li>';
-            $this->content->text .= '<li><a href="' . $accesscontentURL . '" target="_blank">Biểu đồ số lượt truy cập</a></li>';
+            $this->content->text .= '<li><a href="' . $accesscontentURL . '" target="_blank">Biểu đồ thống kê số lượt truy cập</a></li>';
             $this->content->text .= '<li><a href="' . $hitURL . '" target="_blank">Biểu đồ phân phối lượt truy cập</a></li>';
             $this->content->text .= '<li><a href="' . $addInstructionURL . '" target="_blank">Bảng hỗ trợ sinh viên</a></li>';
         }
-
         $this->content->footer = '<hr/>';
-
         return $this->content;
     }
 }
