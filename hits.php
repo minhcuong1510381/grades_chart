@@ -583,8 +583,8 @@ $event->trigger();
         function createRow(array, nomes){
             var red_excl = "images/warning-attention-road-sign-exclamation-mark.png";
             var yellow_excl = "images/exclamation_sign.png";
-            var red_tooltip = <?php echo json_encode("Tuần trước không truy cập mô-đun"); ?>;
-            var yellow_tooltip = <?php echo json_encode("Không truy cập mô-đun đến bây giờ"); ?>;
+            var red_tooltip = <?php echo json_encode("Tuần trước không truy cập khóa học"); ?>;
+            var yellow_tooltip = <?php echo json_encode("Không truy cập khóa học đến bây giờ"); ?>;
             $.each(nomes, function(ind,val){
                 var nome = val;
                 $.each(array, function(index, value){
