@@ -87,5 +87,24 @@ defined('MOODLE_INTERNAL') || die();
             });
         }
     }
+    function createEmailForm(titulo, alunos, courseid, other, subject) {
+        if (!subject) { //if undefined or null then set to default value
+            subject = "";
+        }
+        var nomes="";
+        ids = [];
+        email = [];
+        $.each(alunos, function(ind, val){
+            nomes += val.nome + ", ";
+            ids.push(val.userid);
+            email.push(val.email);
+        });
+        var string =
+            "<h3>" + titulo + "</h3>" +
+            "<p style='font-size:small'>" + nomes + "</p>"
+            ;
+
+        return string;
+    }
 
 </script>

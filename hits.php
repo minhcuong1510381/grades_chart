@@ -591,7 +591,7 @@ $event->trigger();
                     if (value){
                         if (nome === value.nome){
                             var linha = "<tr id='tr-student-"+value.userid+
-                                "'><th><span class='nome_student' \
+                                "'><th><span class='nome_student' style='cursor:hand'\
                              id='linha-"+value.userid+"'>"+value.nome+"</span>"+
                                 "<div class='warnings'>\
                                     <div class='warning1' id='"+value.userid+"_1'>\
@@ -679,6 +679,7 @@ $event->trigger();
 </table>
 
 <script type="text/javascript">
+
     var studentwithaccess = [];
     $.each(students, function(ind, val) {
         var div = "";
@@ -692,9 +693,374 @@ $event->trigger();
                 ", "+ <?php  echo json_encode("Số tài nguyên truy cập");?> + ": "+
                 val.totalofresources ;
             studentwithaccess[0] = val;
+            div =
+                "<div class='div_nomes' id='" + val.userid + "' title='" + val.nome + "'>" +
+                "<div class='student_tabs'> \
+                    <ul> \
+                        <li class='navi_tab'><a href='#email_panel-" + val.userid +
+                "' class='mail' id='tab_link-" + val.userid + "'>" +
+                <?php  echo json_encode("Chi tiết sinh viên");?> +
+                    "</a></li> \
+                <li class='navi_tab'><a href='#student_tab_panel-" + val.userid +
+                "' class='contentaccess' id='tab_link-" + val.userid + "-" + courseid + "'>" +
+                <?php  echo json_encode("Biểu đồ lượt truy cập");?> +
+                    "</a></li> \
+</ul>" +
+                "<div class='student_panel' id='email_panel-" + val.userid + "'>" +
+                createEmailForm(title,studentwithaccess, courseid, 'hits.php',
+                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_grades_chart_get_course_name($course)); ?>) + "</div>" +
+                "<div class='student_panel' id='student_tab_panel-" + val.userid + "'></div>" +
+                "</div>" +
+                "</div>";
+            document.write(div);
         }
     });
+
+    $("li.navi_tab a").click(function(){
+        if($(this).hasClass("contentaccess")){
+            $(this).removeClass('current');
+            $(this).addClass('current');
+            var fill_panel = function(panel_id){
+                return function fill_panel_callback(data){
+                    var material_names = {
+                        "accessed" : [],
+                        "not_accessed" : [],
+                        "accessos" : []
+                    };
+
+                    var material_data = [];
+
+                    var name;
+                    var c_access;
+                    for(elem in data["resources"]){
+                        if(data["resources"][elem]["tipo"] === "activequiz"){
+                            name = data["resources"][elem]["activequiz"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "assign"){
+                            name = data["resources"][elem]["assign"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "attendance"){
+                            name = data["resources"][elem]["attendance"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "bigbluebuttonbn"){
+                            name = data["resources"][elem]["bigbluebuttonbn"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "booking"){
+                            name = data["resources"][elem]["booking"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "certificate"){
+                            name = data["resources"][elem]["certificate"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "chat"){
+                            name = data["resources"][elem]["chat"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "checklist"){
+                            name = data["resources"][elem]["checklist"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "choice"){
+                            name = data["resources"][elem]["choice"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "icontent"){
+                            name = data["resources"][elem]["icontent"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "customcert"){
+                            name = data["resources"][elem]["customcert"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "data"){
+                            name = data["resources"][elem]["data"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "dataform"){
+                            name = data["resources"][elem]["dataform"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "lti"){
+                            name = data["resources"][elem]["lti"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "feedback"){
+                            name = data["resources"][elem]["feedback"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "forum"){
+                            name = data["resources"][elem]["forum"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "game"){
+                            name = data["resources"][elem]["game"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "glossary"){
+                            name = data["resources"][elem]["glossary"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "choicegroup"){
+                            name = data["resources"][elem]["choicegroup"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "groupselect"){
+                            name = data["resources"][elem]["groupselect"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "hotpot"){
+                            name = data["resources"][elem]["hotpot"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "hvp"){
+                            name = data["resources"][elem]["hvp"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "lesson"){
+                            name = data["resources"][elem]["lesson"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "openmeetings"){
+                            name = data["resources"][elem]["openmeetings"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "questionnaire"){
+                            name = data["resources"][elem]["questionnaire"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "quiz"){
+                            name = data["resources"][elem]["quiz"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "quizgame"){
+                            name = data["resources"][elem]["quizgame"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "scheduler"){
+                            name = data["resources"][elem]["scheduler"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "scorm"){
+                            name = data["resources"][elem]["scorm"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "subcourse"){
+                            name = data["resources"][elem]["subcourse"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "survey"){
+                            name = data["resources"][elem]["survey"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "vpl"){
+                            name = data["resources"][elem]["vpl"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "wiki"){
+                            name = data["resources"][elem]["wiki"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "workshop"){
+                            name = data["resources"][elem]["workshop"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "book"){
+                            name = data["resources"][elem]["book"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "resource"){
+                            name = data["resources"][elem]["resource"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "folder"){
+                            name = data["resources"][elem]["folder"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "imscp"){
+                            name = data["resources"][elem]["imscp"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "label"){
+                            name = data["resources"][elem]["label"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "lightboxgallery"){
+                            name = data["resources"][elem]["lightboxgallery"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "page"){
+                            name = data["resources"][elem]["page"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "poster"){
+                            name = data["resources"][elem]["poster"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "recordingsbn"){
+                            name = data["resources"][elem]["recordingsbn"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+                        else if(data["resources"][elem]["tipo"] === "url"){
+                            name = data["resources"][elem]["url"];
+                            c_access = data["resources"][elem]["acessos"];
+                        }
+
+                        if(data["resources"][elem]["userid"] !== "0"){
+                            material_names["accessed"].push(name);
+                            material_names["accessos"].push(c_access);
+                        }
+                        else{
+                            material_names["not_accessed"].push(name);
+                        }
+                    }
+
+                    material_data = [[<?php echo json_encode("Truy cập")?>,
+                        material_names["accessed"].length],
+                        [<?php echo json_encode("Không truy cập")?>,
+                            material_names["not_accessed"].length]];
+
+                    $("#student_tab_panel-" + panel_id).empty().append("\
+                        <div class='res_query'>\
+                        <div class='chart' id='" + panel_id + "-1'></div>\
+                        </div>");
+
+                    var materials_chart_options = {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            events: {
+                                load: function(){
+                                    this.mytooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                                }
+                            }
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        title: {
+                            text: <?php echo json_encode("Biểu đồ lượt truy cập")?>,
+                            style: {
+                                fontSize: '13px',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        tooltip: {
+                            enabled: false,
+                            useHTML: true,
+                            backgroundColor: "rgba(255, 255, 255, 1.0)",
+                            formatter: function(){
+                                var tooltipStr = "<span style='font-size: 13px'><b>" +
+                                    this.point.name +
+                                    "</b></span>:<br>";
+                                if(this.point.name == <?php echo json_encode("Truy cập")?>){
+                                    for(var i = 0; i< material_names["accessed"].length; i++){
+                                        tooltipStr += material_names["accessos"][i] + " lần truy cập vào " + material_names["accessed"][i];
+                                        if(i+1 < material_names["accessed"].length){
+                                            tooltipStr += "<br>";
+                                        }
+                                    }
+                                }
+                                else{
+                                    for(var i = 0; i< material_names["not_accessed"].length; i++){
+                                        tooltipStr += material_names["not_accessed"][i];
+                                        if(i+1 < material_names["not_accessed"].length){
+                                            tooltipStr += "<br>";
+                                        }
+                                    }
+                                }
+                                return "<div class='scrollableHighchartsTooltipAddition'>" + tooltipStr + "</div>";
+                            }
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>:<br/>{point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                                        width: 100
+                                    }
+                                },
+                                colors: ['#7cb5ec', '#FF1111']
+                            },
+                            series : {
+                                stickyTracking: false,
+                                events: {
+                                    click : function(evt){
+                                        this.chart.mytooltip.refresh(evt.point, evt);
+                                    },
+                                    mouseOut : function(){
+                                        this.chart.mytooltip.hide();
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            type: 'pie',
+                            data: material_data
+                        }]
+                    };
+
+                    $("#" + panel_id + "-1.chart").empty().highcharts(materials_chart_options);
+                    $("#" + panel_id + "-1.chart").highcharts().setSize(400, 400, true);
+                }
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "query_resources_access.php",
+                dataType : "JSON",
+                data: {
+                    student_id: this.id.split("-")[1],
+                    course_id: this.id.split("-")[2],
+                    legacy: legacy
+                },
+                success: fill_panel(this.id.split("-")[1])
+            });
+        }
+        return false;
+    });
+    $(".button-fancy").bind("click", function(){
+        $(".div_nomes").dialog("close");
+        $("#studentswithnoaccess").dialog("open");
+        $("#studentswithnoaccess").dialog("option", "position", {
+            my:"center top",
+            at:"center top+" + 10,
+            of:window
+        });
+    });
+    $(".nome_student").bind("click", function(){
+        $(".div_nomes").dialog("close");
+        var val = $(this).attr('id');
+        val = val.split("-");
+        $("#" + val[1]).dialog("open");
+        $("#" + val[1]).dialog("option", "width", 1000);
+        $("#" + val[1]).dialog("option", "height", 600);
+        var offsetTop = window.innerHeight/2 - $("#" + val[1]).dialog("option", "height")/2;
+        $("#" + val[1]).dialog("option", "position", {
+            my:"center top",
+            at:"center top+" + offsetTop,
+            of:window
+        });
+    });
+
+    showContent();
+    $(".student_tabs").tabs({
+        active: 0,
+        heightStyle: "auto"
+    });
+    $(".div_nomes").dialog("close");
 </script>
+
+
 
 </body>
 </html>

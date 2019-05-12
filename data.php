@@ -34,6 +34,7 @@ if ($studentIdCompare) {
 $topic = $_POST['topic'];
 $c = 0;
 $res = [];
+$ave = [];
 
 $check = block_grades_chart_check_student_has_grades($studentId);
 
@@ -41,6 +42,7 @@ if ($check == false) {
     print json_encode(["msg" => "Sinh viên " . $user->{'lastname'} . " " . $user->{'firstname'} . " không có điểm", "response" => 1]);
     return false;
 }
+
 
 foreach ($topic as $key => $t) {
     if ($t != "") {
@@ -51,10 +53,18 @@ foreach ($topic as $key => $t) {
             print json_encode(["msg" => "Tiêu chí thứ " . $key . " không có dữ liệu", "response" => 1]);
             return false;
         }
+
         if ($aQuizId) {
             $q = "SELECT AVG(grade) as average
                 FROM {quiz_grades}
                 WHERE userid = $studentId AND quiz IN ($aQuizId)";
+
+            $queryAve = "SELECT AVG(grade) as aver
+                FROM {quiz_grades}
+                WHERE quiz IN ($aQuizId)";
+
+//            echo "<pre>";
+//            print_r();
 
             $res[] = block_grades_chart_convert_to_array($DB->get_records_sql($q)) + ["name" => $t, "user" => $user->{'lastname'} . " " . $user->{'firstname'}];
 
@@ -66,6 +76,8 @@ foreach ($topic as $key => $t) {
                 $resCp[] = block_grades_chart_convert_to_array($DB->get_records_sql($qCp)) + ["name" => $t, "user" => $userCp->{'lastname'} . " " . $userCp->{'firstname'}];
 
             }
+
+            $ave[] = block_grades_chart_convert_to_array($DB->get_records_sql($queryAve));
         }
     } else {
         $msg = ["msg" => "Tên của tiêu chí " . $key . " chưa được thêm", "response" => 1];
@@ -74,9 +86,9 @@ foreach ($topic as $key => $t) {
     }
 }
 if ($studentIdCompare) {
-    print json_encode(array($res, $resCp));
+    print json_encode(array($res, $resCp, $ave));
 } else {
-    print json_encode($res);
+    print json_encode(array($res, $ave));
 }
 //$studentIdCompare = $_POST['compareStudentId'];
 //

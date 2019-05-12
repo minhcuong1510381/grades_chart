@@ -47,7 +47,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
             <form id="myform" style="margin-top: 20px;">
                 <input type="hidden" id="courseId" name="courseId" value="<?php echo $courseId; ?>">
                 <div class="alert alert-danger" id="alert" role="alert"
-                        style="margin: 0 auto; width: 500px; display: none;">
+                     style="margin: 0 auto; width: 500px; display: none;">
                 </div>
                 <h5 style="margin: 0 auto; width: 500px;">Chọn sinh viên:</h5>
                 <div class="input-group choose-student" style="margin: 0 auto; width: 500px;">
@@ -136,7 +136,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
         <?php } ?>
         <?php if (!$_GET["countTopic"]) { ?>
             <div class="alert alert-danger" id="alert" role="alert"
-                    style="margin: 0 auto; width: 500px; display: none;">
+                 style="margin: 0 auto; width: 500px; display: none;">
             </div>
             <div class="form-inputTopic" style="margin: 0 auto; width: 500px;">
                 <input type="hidden" id="courseId" name="courseId" value="<?php echo $courseId; ?>">
@@ -209,10 +209,10 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                         var score = [];
                         var ave = [];
 
-                        for (var i in obj) {
-                            vertex.push(obj[i].name);
-                            score.push(parseInt(obj[i][0].average));
-                            ave.push(5);
+                        for (var i in obj[0]) {
+                            vertex.push(obj[0][i].name);
+                            score.push(parseFloat(obj[0][i][0].average));
+                            ave.push(parseFloat(obj[1][i][0].aver));
                         }
                         var chartype = {
                             polar: true,
@@ -238,7 +238,8 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                         }
                         var chartooltip = {
                             shared: true,
-                            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f} điểm</b><br/>'
+                            valueDecimals: 1,
+                            valueSuffix: ' điểm'
                         }
                         var chartlegend = {
                             align: 'right',
@@ -247,7 +248,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                             layout: 'vertical'
                         }
                         var chartseries = [{
-                            name: obj[0].user,
+                            name: obj[0][0].user,
                             data: score,
                             color: '#7cb5ec',
                             pointPlacement: 'on'
@@ -259,13 +260,13 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                             pointPlacement: 'on'
                         }]
                         $('#chart1').highcharts({
-                            chart:chartype,
+                            chart: chartype,
                             title: chartitle,
-                            pane:chartpane,
+                            pane: chartpane,
                             xAxis: chartxaxis,
-                            yAxis:chartyaxis,
+                            yAxis: chartyaxis,
                             tooltip: chartooltip,
-                            legend:chartlegend,
+                            legend: chartlegend,
                             series: chartseries
                         });
                     }
@@ -308,13 +309,13 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
 
                             for (var i in obj[0]) {
                                 vertex.push(obj[0][i].name);
-                                score.push(parseInt(obj[0][i][0].average));
-                                ave.push(5);
+                                score.push(parseFloat(obj[0][i][0].average));
+                                ave.push(parseFloat(obj[2][i][0].aver));
                             }
 
                             for (var i in obj[1]) {
                                 vertexCp.push(obj[1][i].name);
-                                scoreCp.push(parseInt(obj[1][i][0].average));
+                                scoreCp.push(parseFloat(obj[1][i][0].average));
                             }
                             var chartype = {
                                 polar: true,
@@ -340,7 +341,8 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                             }
                             var chartooltip = {
                                 shared: true,
-                                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f} điểm</b><br/>'
+                                valueDecimals: 1,
+                                valueSuffix: ' điểm'
                             }
                             var chartlegend = {
                                 align: 'right',
@@ -358,7 +360,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                                 data: scoreCp,
                                 color: '#00FF00',
                                 pointPlacement: 'on'
-                            },{
+                            }, {
                                 name: 'Trung bình',
                                 data: ave,
                                 color: '#FF0000',
@@ -366,13 +368,13 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                                 pointPlacement: 'on'
                             }]
                             $('#chart1').highcharts({
-                                chart:chartype,
+                                chart: chartype,
                                 title: chartitle,
-                                pane:chartpane,
+                                pane: chartpane,
                                 xAxis: chartxaxis,
-                                yAxis:chartyaxis,
+                                yAxis: chartyaxis,
                                 tooltip: chartooltip,
-                                legend:chartlegend,
+                                legend: chartlegend,
                                 series: chartseries
                             });
 
