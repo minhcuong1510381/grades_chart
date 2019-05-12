@@ -1,3 +1,6 @@
+<head>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+</head>
 <?php
 require_once("../../config.php");
 require_once($CFG->dirroot . '/lib/moodlelib.php');
@@ -40,21 +43,27 @@ $quiz = $DB->get_records_sql($query1);
 
 $aQuiz = block_grades_chart_convert_to_array($quiz);
 
-$qr = "SELECT q.name, cm.id
+$qr = "SELECT q.name, q.id, qg.grade
         FROM {quiz} q
         INNER JOIN {course_modules} cm ON q.id = cm.instance
-        WHERE q.course = $courseId AND cm.module = 16";
+        INNER JOIN {quiz_grades} qg ON qg.quiz = q.id
+        WHERE q.course = $courseId AND cm.module = 16 AND qg.userid = $studentId";
 
 $qrArr = block_grades_chart_convert_to_array($DB->get_records_sql($qr));
+
+/*echo "<pre>";
+print_r($qrArr);
+die;*/
 
 $quiz1 = [];
 $result = [];
 foreach ($aQuiz as $key => $value) {
     $t = $value->{'quizid'};
-    $query2 = "SELECT q.name, cm.id
+    $query2 = "SELECT q.name, q.id, qg.grade
                 FROM {quiz} q
                 INNER JOIN {course_modules} cm ON q.id = cm.instance
-                WHERE q.id = $t AND cm.module = 16";
+                INNER JOIN {quiz_grades} qg ON qg.quiz = q.id
+                WHERE q.id = $t AND cm.module = 16 AND qg.userid = $studentId";
 
     $quiz1[] = block_grades_chart_convert_to_array($DB->get_records_sql($query2));
 
@@ -63,8 +72,9 @@ foreach ($aQuiz as $key => $value) {
             unset($qrArr[$k]);
         }
     }
-    $result[] = ["questionId" => $value->{'questionid'}, "state" => $value->{'state'}, "questionsummary" => $value->{'questionsummary'}, "rightanswer" => $value->{'rightanswer'}, "responsesummary" => $value->{'responsesummary'}, "nameQuiz" => $quiz1[$key][0]->{'name'}, "idQuiz" => $quiz1[$key][0]->{'id'}];
+    $result[] = ["questionId" => $value->{'questionid'}, "state" => $value->{'state'}, "questionsummary" => $value->{'questionsummary'}, "rightanswer" => $value->{'rightanswer'}, "responsesummary" => $value->{'responsesummary'}, "nameQuiz" => $quiz1[$key][0]->{'name'}, "idQuiz" => $quiz1[$key][0]->{'id'}, "grade" => $quiz1[$key][0]->{'grade'}];
 }
+
 
 foreach ($qrArr as $q) {
     $result[] = ["nameQuiz" => $q->{'name'}, "idQuiz" => $q->{'id'}];
@@ -72,10 +82,18 @@ foreach ($qrArr as $q) {
 
 $result = groupArray($result, "idQuiz");
 
+foreach ($result as $key => $value) {
+    if ($key == '') {
+        unset($result[$key]);
+    }
+}
+
+// echo "<pre>";
+//     print_r($quiz1);
+//     die;
+
 $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-//echo "<pre>";
-//print_r($result);
-//die;
+
 
 ?>
 <?php include('inc/header.php') ?>
@@ -103,8 +121,18 @@ $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)
                                target="_blank"><span><?php echo $items[0]; ?></span><i
                                         class="fa fa-exclamation-triangle" style="color: orange"></i></a></td>
                     <?php } else { ?>
-                        <td><a href="<?php echo $CFG->wwwroot . '/mod/quiz/view.php?id=' . $name; ?>"
-                               target="_blank"><?php echo $items[0]['nameQuiz']; ?></a></td>
+                        <td><a title="<?php echo $items[0]['grade'].'/'.'10.00000'; ?>" href="<?php echo $CFG->wwwroot . '/mod/quiz/view.php?id=' . $name; ?>"
+                               target="_blank"><?php echo $items[0]['nameQuiz']; ?></a>
+                            <?php if ($items[0]['grade'] >= 8.0) { ?>
+                                <i class="far fa-grin-hearts" style="color: orange"></i>
+                            <?php } else if ($items[0]['grade'] >= 7.0 && $items[0]['grade'] < 8.0) { ?>
+                                <i class="far fa-grin-beam" style="color: green"></i>
+                            <?php } else if ($items[0]['grade'] >= 5.0 && $items[0]['grade'] < 7.0) { ?>
+                                <i class="far fa-frown" style="color: yellow"></i>
+                            <?php } else { ?>
+                                <i class="far fa-sad-cry" style="color: red"></i>
+                            <?php } ?>
+                        </td>
                     <?php } ?>
                     <?php for ($i = 0; $i < countMaxArray($result); $i++) { ?>
                         <?php if (!is_array($items[0])) { ?>
@@ -115,11 +143,15 @@ $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)
                                     <td><a href="javascript:void(0);" data-toggle="modal"
                                            data-target="#myModal-[<?php echo $items[$i]['questionId'] ?>]"><i
                                                     class="fa fa-check"></i></a></td>
-                                <?php } else { ?>
+                                <?php } else if ($items[$i]['state'] == "gradedwrong" || $items[$i]['state'] == "gaveup") { ?>
                                     <td><a href="javascript:void(0);" data-toggle="modal"
                                            data-target="#myModal-[<?php echo $items[$i]['questionId'] ?>]"><i
                                                     class="fa fa-times"></i></a></td>
-                                <?php } ?>
+                                <?php } else {  ?>
+                                    <td><a href="javascript:void(0);" data-toggle="modal"
+                                           data-target="#myModal-[<?php echo $items[$i]['questionId'] ?>]"><i
+                                                    class="fa fa-circle" style="color: yellow"></i></a></td>
+                                <?php } ?> 
                             <?php } else { ?>
                                 <td>-</td>
                             <?php } ?>
