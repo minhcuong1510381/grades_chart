@@ -1046,60 +1046,16 @@ $event->trigger();
                     var name;
                     var count;
                     for(elem in data["resources"]){
-                        if(data["resources"][elem]["tipo"] === "activequiz"){
-                            name = data["resources"][elem]["activequiz"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "assign"){
+                        if(data["resources"][elem]["tipo"] === "assign"){
                             name = data["resources"][elem]["assign"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "attendance"){
-                            name = data["resources"][elem]["attendance"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "bigbluebuttonbn"){
-                            name = data["resources"][elem]["bigbluebuttonbn"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "booking"){
-                            name = data["resources"][elem]["booking"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "certificate"){
-                            name = data["resources"][elem]["certificate"];
                             count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "chat"){
                             name = data["resources"][elem]["chat"];
                             count = data["resources"][elem]["acessos"];
                         }
-                        else if(data["resources"][elem]["tipo"] === "checklist"){
-                            name = data["resources"][elem]["checklist"];
-                            count = data["resources"][elem]["acessos"];
-                        }
                         else if(data["resources"][elem]["tipo"] === "choice"){
                             name = data["resources"][elem]["choice"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "icontent"){
-                            name = data["resources"][elem]["icontent"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "customcert"){
-                            name = data["resources"][elem]["customcert"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "data"){
-                            name = data["resources"][elem]["data"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "dataform"){
-                            name = data["resources"][elem]["dataform"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "lti"){
-                            name = data["resources"][elem]["lti"];
                             count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "feedback"){
@@ -1110,68 +1066,20 @@ $event->trigger();
                             name = data["resources"][elem]["forum"];
                             count = data["resources"][elem]["acessos"];
                         }
-                        else if(data["resources"][elem]["tipo"] === "game"){
-                            name = data["resources"][elem]["game"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "glossary"){
-                            name = data["resources"][elem]["glossary"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "choicegroup"){
-                            name = data["resources"][elem]["choicegroup"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "groupselect"){
-                            name = data["resources"][elem]["groupselect"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "hotpot"){
-                            name = data["resources"][elem]["hotpot"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "hvp"){
-                            name = data["resources"][elem]["hvp"];
-                            count = data["resources"][elem]["acessos"];
-                        }
                         else if(data["resources"][elem]["tipo"] === "lesson"){
                             name = data["resources"][elem]["lesson"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "openmeetings"){
-                            name = data["resources"][elem]["openmeetings"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "questionnaire"){
-                            name = data["resources"][elem]["questionnaire"];
                             count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "quiz"){
                             name = data["resources"][elem]["quiz"];
                             count = data["resources"][elem]["acessos"];
                         }
-                        else if(data["resources"][elem]["tipo"] === "quizgame"){
-                            name = data["resources"][elem]["quizgame"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "scheduler"){
-                            name = data["resources"][elem]["scheduler"];
-                            count = data["resources"][elem]["acessos"];
-                        }
                         else if(data["resources"][elem]["tipo"] === "scorm"){
                             name = data["resources"][elem]["scorm"];
                             count = data["resources"][elem]["acessos"];
                         }
-                        else if(data["resources"][elem]["tipo"] === "subcourse"){
-                            name = data["resources"][elem]["subcourse"];
-                            count = data["resources"][elem]["acessos"];
-                        }
                         else if(data["resources"][elem]["tipo"] === "survey"){
                             name = data["resources"][elem]["survey"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "vpl"){
-                            name = data["resources"][elem]["vpl"];
                             count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "wiki"){
@@ -1194,28 +1102,8 @@ $event->trigger();
                             name = data["resources"][elem]["folder"];
                             count = data["resources"][elem]["acessos"];
                         }
-                        else if(data["resources"][elem]["tipo"] === "imscp"){
-                            name = data["resources"][elem]["imscp"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "label"){
-                            name = data["resources"][elem]["label"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "lightboxgallery"){
-                            name = data["resources"][elem]["lightboxgallery"];
-                            count = data["resources"][elem]["acessos"];
-                        }
                         else if(data["resources"][elem]["tipo"] === "page"){
                             name = data["resources"][elem]["page"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "poster"){
-                            name = data["resources"][elem]["poster"];
-                            count = data["resources"][elem]["acessos"];
-                        }
-                        else if(data["resources"][elem]["tipo"] === "recordingsbn"){
-                            name = data["resources"][elem]["recordingsbn"];
                             count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "url"){
@@ -1243,6 +1131,7 @@ $event->trigger();
 
                     var materials_chart_options = {
                         chart: {
+                            plotShadow: true,
                             type: 'pie',
                             events: {
                                 drilldown: function(e) {
@@ -1293,7 +1182,7 @@ $event->trigger();
                                     enabled: true,
                                     format: '<b>{point.name}</b>:<br/>{point.percentage:.1f} %',
                                 }
-                            }
+                            },
                         },
                         tooltip: {
                             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',

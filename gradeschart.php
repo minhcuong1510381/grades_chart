@@ -217,6 +217,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                         }
                         var chartype = {
                             polar: true,
+                            plotShadow: true,
                             type: 'line'
                         }
                         var chartitle = {
@@ -320,6 +321,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                             }
                             var chartype = {
                                 polar: true,
+                                plotShadow: true,
                                 type: 'line'
                             }
                             var chartitle = {
