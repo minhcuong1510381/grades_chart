@@ -101,8 +101,12 @@ $event->trigger();
     <link rel="stylesheet" href="externalref/jquery-ui-1.12.1/jquery-ui.css">
     <script src="externalref/jquery-1.12.2.js"></script>
     <script src="externalref/jquery-ui-1.12.1/jquery-ui.js"></script>
-    <script src="externalref/highstock.js"></script>
+<!--    <script src="externalref/highstock.js"></script>-->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
     <script src="externalref/no-data-to-display.js"></script>
+    <script src="externalref/exporting.js"></script>
 
     <style>
         div.res_query {
@@ -325,7 +329,6 @@ $event->trigger();
         function gerar_grafico_modulos(student){
             if (student.acessosModulos !== undefined){
                 $("#modulos-"+student.userid).highcharts({
-
                     chart: {
                         borderWidth: 0,
                         type: 'area',
@@ -405,7 +408,7 @@ $event->trigger();
                                 '{point.x}<br>' +
                             <?php echo "'"."Số lượng tài nguyên truy cập".": '"; ?> +
                                 '{point.y}',
-                        positioner: function (w, h, point) { return { x: point.plotX - w / 2, y: point.plotY - h};}
+                        // positioner: function (w, h, point) { return { x: point.plotX - w / 4, y: point.plotY - h};}
                     },
                     plotOptions: {
                         series: {
@@ -538,7 +541,7 @@ $event->trigger();
                             '{point.x}<br>' +
                         <?php echo "'"."Số ngày truy cập".": '"; ?> +
                             '{point.y}',
-                    positioner: function (w, h, point) { return { x: point.plotX - w / 2, y: point.plotY - h}; }
+                    // positioner: function (w, h, point) { return { x: point.plotX - w / 2, y: point.plotY - h}; }
                 },
 
 
@@ -619,12 +622,12 @@ $event->trigger();
                                 "</td>"+
                                 "<td width='250' id='acessos-"+value.userid+"'>"+
                                 "</td>"+
-                                "<td>"+
-                                //(value.totalModulos>0? value.totalModulos : 0)+
-                                (numberofresources[value.userid]? numberofresources[value.userid].number : 0)+
-                                "</td>"+
-                                "<td id='modulos-"+value.userid+"'>"+
-                                "</td>"+
+                                // "<td>"+
+                                // //(value.totalModulos>0? value.totalModulos : 0)+
+                                // (numberofresources[value.userid]? numberofresources[value.userid].number : 0)+
+                                // "</td>"+
+                                // "<td id='modulos-"+value.userid+"'>"+
+                                // "</td>"+
                                 "</tr>";
                             $("table").append(linha);
                             gerar_grafico(value);
@@ -667,8 +670,8 @@ $event->trigger();
         <th><center><?php echo "Số ngày truy cập theo tuần";
                 echo "<br><i>(". "Số tuần"
                     . ": " . ($maxnumberofweeks + 1).")</i>";?></center></th>
-        <th width=50><?php  echo  "Số tài nguyên truy cập";?></th>
-        <th><center><?php echo "Số lượng tài nguyên được truy cập theo tuần ";?></center></th>
+<!--        <th width=50>--><?php // echo  "Số tài nguyên truy cập";?><!--</th>-->
+<!--        <th><center>--><?php //echo "Số lượng tài nguyên được truy cập theo tuần ";?><!--</center></th>-->
     </tr>
     </thead>
     <tbody  id='tbody-sparklines'>
@@ -689,9 +692,7 @@ $event->trigger();
                 <?php  echo json_encode("Số lượt truy cập khóa học");?> + ": "+
                 val.pageViews +
                 ", "+ <?php  echo json_encode("Số ngày truy cập");?> + ": "+
-                val.totalofaccesses +
-                ", "+ <?php  echo json_encode("Số tài nguyên truy cập");?> + ": "+
-                val.totalofresources ;
+                val.totalofaccesses;
             studentwithaccess[0] = val;
             div =
                 "<div class='div_nomes' id='" + val.userid + "' title='" + val.nome + "'>" +
@@ -702,8 +703,8 @@ $event->trigger();
                 <?php  echo json_encode("Chi tiết sinh viên");?> +
                     "</a></li> \
                 <li class='navi_tab'><a href='#student_tab_panel-" + val.userid +
-                "' class='contentaccess' id='tab_link-" + val.userid + "-" + courseid + "'>" +
-                <?php  echo json_encode("Biểu đồ lượt truy cập");?> +
+                "' class='detailhit' id='tab_link-" + val.userid + "-" + courseid + "'>" +
+                <?php  echo json_encode("Chi tiết lượt truy cập");?> +
                     "</a></li> \
 </ul>" +
                 "<div class='student_panel' id='email_panel-" + val.userid + "'>" +
@@ -717,212 +718,523 @@ $event->trigger();
     });
 
     $("li.navi_tab a").click(function(){
-        if($(this).hasClass("contentaccess")){
+        //if($(this).hasClass("contentaccess")){
+        //    $(this).removeClass('current');
+        //    $(this).addClass('current');
+        //    var fill_panel = function(panel_id){
+        //        return function fill_panel_callback(data){
+        //            var material_names = {
+        //                "accessed" : [],
+        //                "not_accessed" : [],
+        //                "accessos" : []
+        //            };
+        //
+        //            var material_data = [];
+        //
+        //            var name;
+        //            var c_access;
+        //            for(elem in data["resources"]){
+        //                if(data["resources"][elem]["tipo"] === "activequiz"){
+        //                    name = data["resources"][elem]["activequiz"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "assign"){
+        //                    name = data["resources"][elem]["assign"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "attendance"){
+        //                    name = data["resources"][elem]["attendance"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "bigbluebuttonbn"){
+        //                    name = data["resources"][elem]["bigbluebuttonbn"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "booking"){
+        //                    name = data["resources"][elem]["booking"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "certificate"){
+        //                    name = data["resources"][elem]["certificate"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "chat"){
+        //                    name = data["resources"][elem]["chat"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "checklist"){
+        //                    name = data["resources"][elem]["checklist"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "choice"){
+        //                    name = data["resources"][elem]["choice"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "icontent"){
+        //                    name = data["resources"][elem]["icontent"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "customcert"){
+        //                    name = data["resources"][elem]["customcert"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "data"){
+        //                    name = data["resources"][elem]["data"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "dataform"){
+        //                    name = data["resources"][elem]["dataform"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "lti"){
+        //                    name = data["resources"][elem]["lti"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "feedback"){
+        //                    name = data["resources"][elem]["feedback"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "forum"){
+        //                    name = data["resources"][elem]["forum"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "game"){
+        //                    name = data["resources"][elem]["game"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "glossary"){
+        //                    name = data["resources"][elem]["glossary"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "choicegroup"){
+        //                    name = data["resources"][elem]["choicegroup"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "groupselect"){
+        //                    name = data["resources"][elem]["groupselect"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "hotpot"){
+        //                    name = data["resources"][elem]["hotpot"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "hvp"){
+        //                    name = data["resources"][elem]["hvp"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "lesson"){
+        //                    name = data["resources"][elem]["lesson"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "openmeetings"){
+        //                    name = data["resources"][elem]["openmeetings"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "questionnaire"){
+        //                    name = data["resources"][elem]["questionnaire"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "quiz"){
+        //                    name = data["resources"][elem]["quiz"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "quizgame"){
+        //                    name = data["resources"][elem]["quizgame"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "scheduler"){
+        //                    name = data["resources"][elem]["scheduler"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "scorm"){
+        //                    name = data["resources"][elem]["scorm"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "subcourse"){
+        //                    name = data["resources"][elem]["subcourse"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "survey"){
+        //                    name = data["resources"][elem]["survey"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "vpl"){
+        //                    name = data["resources"][elem]["vpl"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "wiki"){
+        //                    name = data["resources"][elem]["wiki"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "workshop"){
+        //                    name = data["resources"][elem]["workshop"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "book"){
+        //                    name = data["resources"][elem]["book"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "resource"){
+        //                    name = data["resources"][elem]["resource"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "folder"){
+        //                    name = data["resources"][elem]["folder"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "imscp"){
+        //                    name = data["resources"][elem]["imscp"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "label"){
+        //                    name = data["resources"][elem]["label"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "lightboxgallery"){
+        //                    name = data["resources"][elem]["lightboxgallery"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "page"){
+        //                    name = data["resources"][elem]["page"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "poster"){
+        //                    name = data["resources"][elem]["poster"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "recordingsbn"){
+        //                    name = data["resources"][elem]["recordingsbn"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //                else if(data["resources"][elem]["tipo"] === "url"){
+        //                    name = data["resources"][elem]["url"];
+        //                    c_access = data["resources"][elem]["acessos"];
+        //                }
+        //
+        //                if(data["resources"][elem]["userid"] !== "0"){
+        //                    material_names["accessed"].push(name);
+        //                    material_names["accessos"].push(c_access);
+        //                }
+        //                else{
+        //                    material_names["not_accessed"].push(name);
+        //                }
+        //            }
+        //
+        //            material_data = [[<?php //echo json_encode("Truy cập")?>//,
+        //                material_names["accessed"].length],
+        //                [<?php //echo json_encode("Không truy cập")?>//,
+        //                    material_names["not_accessed"].length]];
+        //
+        //            $("#student_tab_panel-" + panel_id).empty().append("\
+        //                <div class='res_query'>\
+        //                <div class='chart' id='" + panel_id + "-1'></div>\
+        //                </div>");
+        //
+        //            var materials_chart_options = {
+        //                chart: {
+        //                    plotBackgroundColor: null,
+        //                    plotBorderWidth: null,
+        //                    plotShadow: false,
+        //                    events: {
+        //                        load: function(){
+        //                            this.mytooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+        //                        }
+        //                    }
+        //                },
+        //                credits: {
+        //                    enabled: false
+        //                },
+        //                title: {
+        //                    text: <?php //echo json_encode("Biểu đồ lượt truy cập")?>//,
+        //                    style: {
+        //                        fontSize: '13px',
+        //                        fontWeight: 'bold'
+        //                    }
+        //                },
+        //                tooltip: {
+        //                    enabled: false,
+        //                    useHTML: true,
+        //                    backgroundColor: "rgba(255, 255, 255, 1.0)",
+        //                    formatter: function(){
+        //                        var tooltipStr = "<span style='font-size: 13px'><b>" +
+        //                            this.point.name +
+        //                            "</b></span>:<br>";
+        //                        if(this.point.name == <?php //echo json_encode("Truy cập")?>//){
+        //                            for(var i = 0; i< material_names["accessed"].length; i++){
+        //                                tooltipStr += material_names["accessos"][i] + " lần truy cập vào " + material_names["accessed"][i];
+        //                                if(i+1 < material_names["accessed"].length){
+        //                                    tooltipStr += "<br>";
+        //                                }
+        //                            }
+        //                        }
+        //                        else{
+        //                            for(var i = 0; i< material_names["not_accessed"].length; i++){
+        //                                tooltipStr += material_names["not_accessed"][i];
+        //                                if(i+1 < material_names["not_accessed"].length){
+        //                                    tooltipStr += "<br>";
+        //                                }
+        //                            }
+        //                        }
+        //                        return "<div class='scrollableHighchartsTooltipAddition'>" + tooltipStr + "</div>";
+        //                    }
+        //                },
+        //                plotOptions: {
+        //                    pie: {
+        //                        allowPointSelect: true,
+        //                        cursor: 'pointer',
+        //                        dataLabels: {
+        //                            enabled: true,
+        //                            format: '<b>{point.name}</b>:<br/>{point.percentage:.1f} %',
+        //                            style: {
+        //                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+        //                                width: 100
+        //                            }
+        //                        },
+        //                        colors: ['#7cb5ec', '#FF1111']
+        //                    },
+        //                    series : {
+        //                        stickyTracking: false,
+        //                        events: {
+        //                            click : function(evt){
+        //                                this.chart.mytooltip.refresh(evt.point, evt);
+        //                            },
+        //                            mouseOut : function(){
+        //                                this.chart.mytooltip.hide();
+        //                            }
+        //                        }
+        //                    }
+        //                },
+        //                series: [{
+        //                    type: 'pie',
+        //                    data: material_data
+        //                }]
+        //            };
+        //
+        //            $("#" + panel_id + "-1.chart").empty().highcharts(materials_chart_options);
+        //            $("#" + panel_id + "-1.chart").highcharts().setSize(400, 400, true);
+        //        }
+        //    };
+        //
+        //    $.ajax({
+        //        method: "POST",
+        //        url: "query_resources_access.php",
+        //        dataType : "JSON",
+        //        data: {
+        //            student_id: this.id.split("-")[1],
+        //            course_id: this.id.split("-")[2],
+        //            legacy: legacy
+        //        },
+        //        success: fill_panel(this.id.split("-")[1])
+        //    });
+        //}
+        if($(this).hasClass("detailhit")){
+            // alert("abc");
             $(this).removeClass('current');
             $(this).addClass('current');
             var fill_panel = function(panel_id){
                 return function fill_panel_callback(data){
-                    var material_names = {
+                    var detailAccess_name = {
                         "accessed" : [],
-                        "not_accessed" : [],
-                        "accessos" : []
+                        "not_accessed": []
+                    };
+                    var detailCount = {
+                        "acessos" : []
                     };
 
-                    var material_data = [];
+                    var detail_data = [];
 
                     var name;
-                    var c_access;
+                    var count;
                     for(elem in data["resources"]){
                         if(data["resources"][elem]["tipo"] === "activequiz"){
                             name = data["resources"][elem]["activequiz"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "assign"){
                             name = data["resources"][elem]["assign"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "attendance"){
                             name = data["resources"][elem]["attendance"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "bigbluebuttonbn"){
                             name = data["resources"][elem]["bigbluebuttonbn"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "booking"){
                             name = data["resources"][elem]["booking"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "certificate"){
                             name = data["resources"][elem]["certificate"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "chat"){
                             name = data["resources"][elem]["chat"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "checklist"){
                             name = data["resources"][elem]["checklist"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "choice"){
                             name = data["resources"][elem]["choice"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "icontent"){
                             name = data["resources"][elem]["icontent"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "customcert"){
                             name = data["resources"][elem]["customcert"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "data"){
                             name = data["resources"][elem]["data"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "dataform"){
                             name = data["resources"][elem]["dataform"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "lti"){
                             name = data["resources"][elem]["lti"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "feedback"){
                             name = data["resources"][elem]["feedback"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "forum"){
                             name = data["resources"][elem]["forum"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "game"){
                             name = data["resources"][elem]["game"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "glossary"){
                             name = data["resources"][elem]["glossary"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "choicegroup"){
                             name = data["resources"][elem]["choicegroup"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "groupselect"){
                             name = data["resources"][elem]["groupselect"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "hotpot"){
                             name = data["resources"][elem]["hotpot"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "hvp"){
                             name = data["resources"][elem]["hvp"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "lesson"){
                             name = data["resources"][elem]["lesson"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "openmeetings"){
                             name = data["resources"][elem]["openmeetings"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "questionnaire"){
                             name = data["resources"][elem]["questionnaire"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "quiz"){
                             name = data["resources"][elem]["quiz"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "quizgame"){
                             name = data["resources"][elem]["quizgame"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "scheduler"){
                             name = data["resources"][elem]["scheduler"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "scorm"){
                             name = data["resources"][elem]["scorm"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "subcourse"){
                             name = data["resources"][elem]["subcourse"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "survey"){
                             name = data["resources"][elem]["survey"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "vpl"){
                             name = data["resources"][elem]["vpl"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "wiki"){
                             name = data["resources"][elem]["wiki"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "workshop"){
                             name = data["resources"][elem]["workshop"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "book"){
                             name = data["resources"][elem]["book"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "resource"){
                             name = data["resources"][elem]["resource"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "folder"){
                             name = data["resources"][elem]["folder"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "imscp"){
                             name = data["resources"][elem]["imscp"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "label"){
                             name = data["resources"][elem]["label"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "lightboxgallery"){
                             name = data["resources"][elem]["lightboxgallery"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "page"){
                             name = data["resources"][elem]["page"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "poster"){
                             name = data["resources"][elem]["poster"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "recordingsbn"){
                             name = data["resources"][elem]["recordingsbn"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
                         else if(data["resources"][elem]["tipo"] === "url"){
                             name = data["resources"][elem]["url"];
-                            c_access = data["resources"][elem]["acessos"];
+                            count = data["resources"][elem]["acessos"];
                         }
 
                         if(data["resources"][elem]["userid"] !== "0"){
-                            material_names["accessed"].push(name);
-                            material_names["accessos"].push(c_access);
+                            detailAccess_name["accessed"].push(name);
+                            detailCount["acessos"].push(count);
                         }
                         else{
-                            material_names["not_accessed"].push(name);
+                            detailAccess_name["not_accessed"].push(name);
                         }
                     }
 
-                    material_data = [[<?php echo json_encode("Truy cập")?>,
-                        material_names["accessed"].length],
-                        [<?php echo json_encode("Không truy cập")?>,
-                            material_names["not_accessed"].length]];
+                    for (var k = 0; k < detailAccess_name["accessed"].length; k++){
+                        detail_data.push([detailAccess_name["accessed"][k],parseInt(detailCount["acessos"][k])]);
+                    }
 
                     $("#student_tab_panel-" + panel_id).empty().append("\
                         <div class='res_query'>\
@@ -931,89 +1243,87 @@ $event->trigger();
 
                     var materials_chart_options = {
                         chart: {
-                            plotBackgroundColor: null,
-                            plotBorderWidth: null,
-                            plotShadow: false,
+                            type: 'pie',
                             events: {
-                                load: function(){
-                                    this.mytooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                                drilldown: function(e) {
+                                    this.setSize(1200,500,true);
+                                    this.yAxis[0].update({
+                                        title: {
+                                            text: 'Số lần truy cập tài nguyên'
+                                        }
+                                    }, false, false);
+                                    e.seriesOptions.dataLabels = {
+                                        enabled: true,
+                                        format: '{point.y:.1f} lần'
+                                    };
+                                    e.seriesOptions.tooltip = {
+                                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>Truy cập {point.y:.1f} lần</b><br/>'
+                                    };
+                                },
+                                drillup: function(e) {
+                                    this.setSize(500,400,true);
+                                    this.yAxis[0].update({
+                                        title: {
+                                            text: ''
+                                        }
+                                    }, false, false);
+                                    e.seriesOptions.dataLabels = {
+                                        enabled: true,
+                                        format: '<b>{point.name}</b>:<br/>{point.percentage:.1f} %',
+                                    };
+                                    e.seriesOptions.tooltip = {
+                                        pointFormat: '<b>{point.name}</b>:<br/>{point.percentage:.1f} %',
+                                    };
                                 }
                             }
-                        },
-                        credits: {
-                            enabled: false
                         },
                         title: {
-                            text: <?php echo json_encode("Biểu đồ lượt truy cập")?>,
-                            style: {
-                                fontSize: '13px',
-                                fontWeight: 'bold'
-                            }
+                            text: 'Biểu đồ chi tiết số lượt truy cập tài nguyên'
                         },
-                        tooltip: {
-                            enabled: false,
-                            useHTML: true,
-                            backgroundColor: "rgba(255, 255, 255, 1.0)",
-                            formatter: function(){
-                                var tooltipStr = "<span style='font-size: 13px'><b>" +
-                                    this.point.name +
-                                    "</b></span>:<br>";
-                                if(this.point.name == <?php echo json_encode("Truy cập")?>){
-                                    for(var i = 0; i< material_names["accessed"].length; i++){
-                                        tooltipStr += material_names["accessos"][i] + " lần truy cập vào " + material_names["accessed"][i];
-                                        if(i+1 < material_names["accessed"].length){
-                                            tooltipStr += "<br>";
-                                        }
-                                    }
-                                }
-                                else{
-                                    for(var i = 0; i< material_names["not_accessed"].length; i++){
-                                        tooltipStr += material_names["not_accessed"][i];
-                                        if(i+1 < material_names["not_accessed"].length){
-                                            tooltipStr += "<br>";
-                                        }
-                                    }
-                                }
-                                return "<div class='scrollableHighchartsTooltipAddition'>" + tooltipStr + "</div>";
-                            }
+                        xAxis: {
+                            type: 'category'
+                        },
+                        legend: {
+                            enabled: false
                         },
                         plotOptions: {
-                            pie: {
-                                allowPointSelect: true,
-                                cursor: 'pointer',
+                            series: {
+                                borderWidth: 0,
                                 dataLabels: {
                                     enabled: true,
                                     format: '<b>{point.name}</b>:<br/>{point.percentage:.1f} %',
-                                    style: {
-                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
-                                        width: 100
-                                    }
-                                },
-                                colors: ['#7cb5ec', '#FF1111']
-                            },
-                            series : {
-                                stickyTracking: false,
-                                events: {
-                                    click : function(evt){
-                                        this.chart.mytooltip.refresh(evt.point, evt);
-                                    },
-                                    mouseOut : function(){
-                                        this.chart.mytooltip.hide();
-                                    }
                                 }
                             }
                         },
+                        tooltip: {
+                            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                            pointFormat: '<b>{point.name}</b>:<br/>{point.percentage:.1f} %',
+                        },
                         series: [{
-                            type: 'pie',
-                            data: material_data
-                        }]
+                            name: 'Phần trăm lượt truy cập',
+                            colorByPoint: true,
+                            data: [{
+                                name: "Truy cập",
+                                y: detailAccess_name["accessed"].length,
+                                drilldown: 'Truy cập'
+                            }, {
+                                name: "Không truy cập",
+                                y: detailAccess_name["not_accessed"].length,
+                            }]
+                        }],
+                        drilldown: {
+                            series: [{
+                                type: 'column',
+                                name: 'Truy cập',
+                                id: 'Truy cập',
+                                data: detail_data
+                            }]
+                        }
                     };
-
                     $("#" + panel_id + "-1.chart").empty().highcharts(materials_chart_options);
-                    $("#" + panel_id + "-1.chart").highcharts().setSize(400, 400, true);
+                    // $("#" + panel_id + "-1.chart").highcharts().setSize(1200, 500, true);
                 }
             };
-
             $.ajax({
                 method: "POST",
                 url: "query_resources_access.php",

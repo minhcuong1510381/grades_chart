@@ -160,6 +160,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
 <?php include('inc/footer.php') ?>
 <script src="externalref/highcharts.js"></script>
 <script src="externalref/highcharts-more.js"></script>
+<script src="externalref/exporting.js"></script>
 <script>
     $(document).ready(function () {
         $('#setting').on('click', function () {
