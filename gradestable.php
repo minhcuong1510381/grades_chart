@@ -43,7 +43,7 @@ $quiz = $DB->get_records_sql($query1);
 
 $aQuiz = block_grades_chart_convert_to_array($quiz);
 
-$qr = "SELECT q.name, q.id, qg.grade
+$qr = "SELECT q.name, cm.id, qg.grade
         FROM {quiz} q
         INNER JOIN {course_modules} cm ON q.id = cm.instance
         INNER JOIN {quiz_grades} qg ON qg.quiz = q.id
@@ -51,11 +51,14 @@ $qr = "SELECT q.name, q.id, qg.grade
 
 $qrArr = block_grades_chart_convert_to_array($DB->get_records_sql($qr));
 
+//echo "<pre>";
+//print_r($qrArr);die;
+
 $quiz1 = [];
 $result = [];
 foreach ($aQuiz as $key => $value) {
     $t = $value->{'quizid'};
-    $query2 = "SELECT q.name, q.id, qg.grade
+    $query2 = "SELECT q.name, cm.id, qg.grade
                 FROM {quiz} q
                 INNER JOIN {course_modules} cm ON q.id = cm.instance
                 INNER JOIN {quiz_grades} qg ON qg.quiz = q.id
