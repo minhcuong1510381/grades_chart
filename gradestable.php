@@ -51,10 +51,6 @@ $qr = "SELECT q.name, q.id, qg.grade
 
 $qrArr = block_grades_chart_convert_to_array($DB->get_records_sql($qr));
 
-/*echo "<pre>";
-print_r($qrArr);
-die;*/
-
 $quiz1 = [];
 $result = [];
 foreach ($aQuiz as $key => $value) {
@@ -88,12 +84,12 @@ foreach ($result as $key => $value) {
     }
 }
 
-// echo "<pre>";
-//     print_r($quiz1);
-//     die;
+if($result == null){
+    echo("Không có dữ liệu cho sinh viên này.");
+    exit;
+}
 
 $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-
 
 ?>
 <?php include('inc/header.php') ?>
@@ -151,7 +147,7 @@ $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)
                                     <td><a href="javascript:void(0);" data-toggle="modal"
                                            data-target="#myModal-[<?php echo $items[$i]['questionId'] ?>]"><i
                                                     class="fa fa-circle" style="color: yellow"></i></a></td>
-                                <?php } ?> 
+                                <?php } ?>
                             <?php } else { ?>
                                 <td>-</td>
                             <?php } ?>
