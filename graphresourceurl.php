@@ -118,6 +118,7 @@ $numberofresourcesintopic = 0;
 $resourceid = 0;
 $numberofresourcesintopic = array();
 
+
 foreach ($result as $tuple) {
     if ($resourceid == 0) { /* First time in loop -> get topic and content name */
         $numberofresourcesintopic[$tuple->section] = 1;
@@ -234,6 +235,7 @@ foreach ($result as $tuple) {
         }
     }
 }
+
 $statistics[$counter]['numberofaccesses'] = $numberofaccesses;
 $statistics[$counter]['numberofnoaccess'] = $numberofstudents - $numberofaccesses;
 if ($numberofaccesses == 0) {
@@ -470,11 +472,11 @@ $event->trigger();
                 series: [{
                     name: '<?php echo "Truy cập"; ?>',
                     data: nraccess_vet,
-                    color: '#82FA58'
+                    color: 'rgb(124, 181, 236)'
                 }, {
                     name: '<?php echo "Không truy cập"; ?>',
                     data: nrntaccess_vet,
-                    color: '#FE2E2E'
+                    color: 'rgb(67, 67, 72)'
                 }]
             });
         });
