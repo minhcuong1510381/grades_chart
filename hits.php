@@ -29,7 +29,7 @@ $students = block_grades_chart_get_students($course);
 
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
-    echo("Không có sinh viên trong khóa học");
+    echo("Không có học viên trong khóa học");
     exit;
 }
 foreach ($students as $tuple) {
@@ -656,7 +656,7 @@ $event->trigger();
 }
 ?>
 <center>
-    <H2><?php  echo   "Biểu đồ phân phối lượt truy cập của sinh viên";?></H2>
+    <H2><?php  echo   "Biểu đồ phân phối lượt truy cập của học viên";?></H2>
     <H3><?php  echo $coursename;?> </H3>
     <H3><?php  echo   "Bắt đầu từ" . ": "
             . userdate($startdate, get_string('strftimerecentfull'));?> </H3>
@@ -664,7 +664,7 @@ $event->trigger();
 <table id="table-sparkline" >
     <thead>
     <tr>
-        <th><?php  echo "Họ tên sinh viên";?></th>
+        <th><?php  echo "Họ tên học viên";?></th>
         <th width=50><?php echo "Số lượt truy cập khóa học";?></th>
         <th width=50><?php echo "Số ngày truy cập";?></th>
         <th><center><?php echo "Số ngày truy cập theo tuần";
@@ -700,7 +700,7 @@ $event->trigger();
                     <ul> \
                         <li class='navi_tab'><a href='#email_panel-" + val.userid +
                 "' class='mail' id='tab_link-" + val.userid + "'>" +
-                <?php  echo json_encode("Chi tiết sinh viên");?> +
+                <?php  echo json_encode("Chi tiết học viên");?> +
                     "</a></li> \
                 <li class='navi_tab'><a href='#student_tab_panel-" + val.userid +
                 "' class='detailhit' id='tab_link-" + val.userid + "-" + courseid + "'>" +

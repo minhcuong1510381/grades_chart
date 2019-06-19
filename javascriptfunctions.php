@@ -45,7 +45,7 @@ defined('MOODLE_INTERNAL') || die();
         });
         var string =
             "<h3>" + titulo + "</h3>" +
-            "<p style='font-size:15px'>" +"<b>Gồm những sinh viên sau:</b>" + "<br>" +nomes + "</p>";
+            "<p style='font-size:15px'>" +"<b>Gồm những học viên sau:</b>" + "<br>" +nomes + "</p>";
 
         return string;
     }

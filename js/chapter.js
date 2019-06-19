@@ -75,7 +75,7 @@ $(document).ready(function () {
                             fill: false,
                         },
                         {
-                            label: "Phần trăm sinh viên có ĐTB lớn hơn hoặc bằng 5",
+                            label: "Phần trăm học viên có ĐTB lớn hơn hoặc bằng 5",
                             backgroundColor: color,
                             borderColor: boder,
                             borderWidth: '1',

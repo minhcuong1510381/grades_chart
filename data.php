@@ -26,7 +26,7 @@ if ($studentIdCompare) {
     $check1 = block_grades_chart_check_student_has_grades($studentIdCompare);
 
     if ($check1 == false) {
-        print json_encode(["msg" => "Sinh viên " . $userCp->{'lastname'} . " " . $userCp->{'firstname'} . " không có điểm", "response" => 1]);
+        print json_encode(["msg" => "Học viên " . $userCp->{'lastname'} . " " . $userCp->{'firstname'} . " không có điểm", "response" => 1]);
         return false;
     }
 }
@@ -39,7 +39,7 @@ $ave = [];
 $check = block_grades_chart_check_student_has_grades($studentId);
 
 if ($check == false) {
-    print json_encode(["msg" => "Sinh viên " . $user->{'lastname'} . " " . $user->{'firstname'} . " không có điểm", "response" => 1]);
+    print json_encode(["msg" => "Học viên " . $user->{'lastname'} . " " . $user->{'firstname'} . " không có điểm", "response" => 1]);
     return false;
 }
 

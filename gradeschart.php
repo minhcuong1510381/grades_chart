@@ -22,7 +22,7 @@ if ($isStudent == 1) {
 $students = block_grades_chart_get_students($courseId);
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
-    echo("Không có sinh viên trong khóa học");
+    echo("Không có học viên trong khóa học");
     exit;
 }
 
@@ -41,7 +41,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
 <div class="container" style="height: 700px;">
     <div class="header">
         <div class="title-gradeschart" style="margin: 0 auto; width: 500px; text-align: center">
-            <h3>Biểu đồ đánh giá chi tiết năng lực của sinh viên</h3>
+            <h3>Biểu đồ đánh giá chi tiết năng lực của học viên</h3>
         </div>
         <?php if ($_GET["countTopic"]) { ?>
             <form id="myform" style="margin-top: 20px;">
@@ -49,7 +49,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                 <div class="alert alert-danger" id="alert" role="alert"
                      style="margin: 0 auto; width: 500px; display: none;">
                 </div>
-                <h5 style="margin: 0 auto; width: 500px;">Chọn sinh viên:</h5>
+                <h5 style="margin: 0 auto; width: 500px;">Chọn học viên:</h5>
                 <div class="input-group choose-student" style="margin: 0 auto; width: 500px;">
                     <select class="form-control selectpicker" id="student" name="studentId" data-live-search="true">
                         <?php foreach ($students as $key => $value) { ?>
@@ -64,7 +64,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                 </div>
                 <div class="form-group choose-student-compare" style="margin: 0 auto; width: 500px; display: none;"
                      id="compare-student">
-                    <label>Chọn sinh viên để so sánh:</label>
+                    <label>Chọn học viên để so sánh:</label>
                     <select class="form-control selectpicker" id="choose-compare-student" data-live-search="true">
                         <?php foreach ($students as $key => $value) { ?>
                             <option value="<?php echo $value->{'id'}; ?>">
@@ -221,7 +221,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                             type: 'line'
                         }
                         var chartitle = {
-                            text: 'Biểu đồ năng lực sinh viên',
+                            text: 'Biểu đồ năng lực học viên',
                             x: -80
                         }
                         var chartpane = {
@@ -278,7 +278,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                 var studentIdCpCheck = $('#choose-compare-student').val();
 
                 if (studentIdCheck == studentIdCpCheck) {
-                    $('#alert').html("Chọn sinh viên so sánh không phù hợp!");
+                    $('#alert').html("Chọn học viên so sánh không phù hợp!");
 
                     $('#alert').css("display", "block");
 
@@ -325,7 +325,7 @@ $aQuiz = block_grades_chart_convert_to_array($DB->get_records_sql($query));
                                 type: 'line'
                             }
                             var chartitle = {
-                                text: 'Biểu đồ năng lực sinh viên',
+                                text: 'Biểu đồ năng lực học viên',
                                 x: -80
                             }
                             var chartpane = {

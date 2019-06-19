@@ -799,3 +799,52 @@ function block_grades_chart_get_user_resource_url_page_access($course, $student,
     return($result);
 
 }
+
+function block_grades_chart_get_logstore_loglife() {
+    global $DB;
+    $sql = "SELECT  a.id, a.plugin, a.name, a.value
+                FROM {config_plugins} a
+                WHERE a.name = 'loglifetime' AND a.plugin = 'logstore_standard'
+                ORDER BY name";
+    $result = $DB->get_records_sql($sql);
+    return reset($result)->value;
+}
+
+function block_grades_chart_get_course_days_since_startdate($course) {
+    global $DB;
+    $sql = "SELECT  a.id, a.startdate
+                FROM {course} a
+                WHERE a.id = " . $course;
+    $result = $DB->get_records_sql($sql);
+    $startdate = reset($result)->startdate;
+    $currentdate = time();
+    return floor(($currentdate - $startdate) / (60 * 60 * 24));
+}
+
+function block_grades_chart_get_accesses_last_days($course, $estudantes, $daystoget) {
+    global $DB;
+    $date = strtotime(date('Y-m-d', strtotime('-'. $daystoget .' days')));
+    $sql = "SELECT s.id, s.action, s.target, s.userid, s.courseid, s.timecreated, usr.firstname, usr.lastname
+            FROM {logstore_standard_log} s
+            LEFT JOIN {user} usr ON s.userid = usr.id
+            WHERE s.courseid = " . $course . " AND s.timecreated >= " . $date . "
+            AND (";
+    $iterator = 0;
+    foreach ($estudantes as $item) {
+        if ($iterator == 0) {
+            $sql .= " s.userid = " . $item->id;
+        } else {
+            $sql .= " OR s.userid = " . $item->id;
+        }
+        $iterator++;
+    }
+    $sql .= " )
+             ORDER BY s.timecreated";
+    $resultado = $DB->get_records_sql($sql);
+
+    foreach ($resultado as $item) {
+        $item->timecreated = date("His", $item->timecreated);
+    }
+
+    return($resultado);
+}

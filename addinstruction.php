@@ -23,7 +23,7 @@ if ($isStudent == 1) {
 $students = block_grades_chart_get_students($courseId);
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
-    echo("Không có sinh viên trong khóa học");
+    echo("Không có học viên trong khóa học");
     exit;
 }
 
@@ -45,7 +45,7 @@ $result = groupArray($aQuiz, "quizid");
 <div class="container">
     <div class="header">
         <div class="title-gradeschart" style="margin: 0 auto; width: 500px; text-align: center">
-            <h3>Bảng hỗ trợ sinh viên</h3>
+            <h3>Bảng hỗ trợ học viên</h3>
         </div>
     </div>
     <div class="content" style="margin-top: 30px;">

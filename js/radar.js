@@ -20,7 +20,7 @@ $(document).ready(function () {
                     // console.log(obj);
                     // return false;
                     if (obj.response == 1) {
-                        alert("Sinh viên " + obj.user + " hiện chưa có điểm");
+                        alert("Học viên " + obj.user + " hiện chưa có điểm");
                         return false;
                     }
                     var vertex = [];
@@ -196,7 +196,7 @@ $(document).ready(function () {
 
                         var obj = JSON.parse(data);
                         if (obj.response == 1) {
-                            alert("Sinh viên " + obj.user + " hiện chưa có điểm");
+                            alert("Học viên " + obj.user + " hiện chưa có điểm");
                             return false;
                         }
                         var vertex = [];

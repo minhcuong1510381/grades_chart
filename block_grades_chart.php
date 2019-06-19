@@ -35,16 +35,18 @@ class block_grades_chart extends block_base
         $addInstructionURL = new moodle_url('/blocks/grades_chart/addinstruction.php', array('courseId' => $courseId));
         $accesscontentURL = new moodle_url('/blocks/grades_chart/graphresourcestartup.php', array('courseId' => $courseId));
         $hitURL = new moodle_url('/blocks/grades_chart/hits.php', array('courseId' => $courseId, "legacy" => 0));
+        $numberActiveURL = new moodle_url('/blocks/grades_chart/timeaccesses.php', array('courseId' => $courseId, "days" => 7));
 
         $this->content = new stdClass;
 
         if ($isStudent == 1) {
             $this->content->text = '<li><a href="' . $tableURL . '" target="_blank">Bảng xem lại khóa học</a></li>';
         } else {
-            $this->content->text = '<li><a href="' . $chartURL . '" target="_blank">Biểu đồ năng lực sinh viên</a></li>';
+            $this->content->text = '<li><a href="' . $chartURL . '" target="_blank">Biểu đồ năng lực học viên</a></li>';
             $this->content->text .= '<li><a href="' . $accesscontentURL . '" target="_blank">Biểu đồ thống kê số lượt truy cập</a></li>';
             $this->content->text .= '<li><a href="' . $hitURL . '" target="_blank">Biểu đồ phân phối lượt truy cập</a></li>';
-            $this->content->text .= '<li><a href="' . $addInstructionURL . '" target="_blank">Bảng hỗ trợ sinh viên</a></li>';
+            $this->content->text .= '<li><a href="' . $numberActiveURL . '" target="_blank">Biểu đồ hoạt động của học viên</a></li>';
+            $this->content->text .= '<li><a href="' . $addInstructionURL . '" target="_blank">Bảng hỗ trợ học viên</a></li>';
         }
         $this->content->footer = '<hr/>';
         return $this->content;

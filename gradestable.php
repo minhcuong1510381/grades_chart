@@ -88,7 +88,7 @@ foreach ($result as $key => $value) {
 }
 
 if($result == null){
-    echo("Không có dữ liệu cho sinh viên này.");
+    echo("Không có dữ liệu cho học viên này.");
     exit;
 }
 

@@ -24,7 +24,7 @@ $coursename = "Khóa học" . ": " . $courseparams->fullname;
 $students = block_grades_chart_get_students($course);
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
-    echo("Không có sinh viên");
+    echo("Không có học viên");
     exit;
 }
 foreach ($students as $tuple) {
@@ -405,7 +405,7 @@ $event->trigger();
                     maxPadding: 0.1,
                     minTickInterval: 1,
                     title: {
-                        text: '<?php echo "Số lượng sinh viên"; ?>',
+                        text: '<?php echo "Số lượng học viên"; ?>',
                         align: 'high'
                     },
                     labels: {
@@ -414,7 +414,7 @@ $event->trigger();
                 },
 
                 tooltip: {
-                    valueSuffix: ' <?php echo "Sinh viên"; ?>'
+                    valueSuffix: ' <?php echo "Học viên"; ?>'
                 },
 
                 plotOptions: {
