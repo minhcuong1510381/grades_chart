@@ -34,7 +34,7 @@ if ($numberofstudents == 0) {
 }
 foreach ($students as $tuple) {
     $arrayofstudents[] = array('userid' => $tuple->id ,
-        'nome' => $tuple->firstname.' '.$tuple->lastname,
+        'nome' => $tuple->lastname.' '.$tuple->firstname,
         'email' => $tuple->email);
 }
 
@@ -46,7 +46,7 @@ $resultado = block_grades_chart_get_number_of_days_access_by_week($course, $stud
 $maxnumberofweeks = 0;
 foreach ($resultado as $tuple) {
     $arrayofaccess[] = array('userid' => $tuple->userid ,
-        'nome' => $tuple->firstname.' '.$tuple->lastname,
+        'nome' => $tuple->lastname.' '.$tuple->firstname,
         'email' => $tuple->email);
     if ($tuple->week > $maxnumberofweeks) {
         $maxnumberofweeks = $tuple->week;
@@ -237,7 +237,7 @@ $event->trigger();
         var totalResourceAccessData = [];
         var totalWeekDaysAccessData = [];
         $.each(geral, function(ind, val){
-            var nome = val.firstname+" "+val.lastname;
+            var nome = val.lastname+" "+val.firstname;
             if (nomes.indexOf(nome) === -1)
                 nomes.push(nome);
 
@@ -258,7 +258,7 @@ $event->trigger();
             }else{
                 var student = {};
                 student.userid = Number(val.userid);
-                student.nome = val.firstname+" "+val.lastname;
+                student.nome = val.lastname+" "+val.firstname;
                 student.email = val.email;
                 student.semanas = [];
                 student.semanas[val.week] = Number(val.week);

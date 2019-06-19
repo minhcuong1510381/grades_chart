@@ -41,7 +41,7 @@ $daysaccess = json_encode($daysaccess);
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Biểu đồ mô tả hoạt động của học viên</title>
-
+	<link rel="shortcut icon" href="img/favicon.ico">
     <link rel="stylesheet" href="externalref/jquery-ui-1.12.1/jquery-ui.css">
     <script src="externalref/jquery-1.12.2.js"></script>
     <script src="externalref/jquery-ui-1.12.1/jquery-ui.js"></script>
@@ -260,7 +260,7 @@ $daysaccess = json_encode($daysaccess);
                     if (data[j].timecreated >= hourbegin && data[j].timecreated <= hourend) {
                         if (jQuery.inArray(data[j].userid, countedIds) == -1) {
                             countedIds.push(data[j].userid);
-                            tooltipStr += data[j].firstname + " " + data[j].lastname + "<br>";
+                            tooltipStr += data[j].lastname + " " + data[j].firstname + "<br>";
                         }
                     }
                 }
@@ -496,7 +496,7 @@ $daysaccess = json_encode($daysaccess);
                 for(var j in data)
                 {
                     if (data[j].timecreated >= hourbegin && data[j].timecreated <= hourend) {
-                        var tempstr = data[j].firstname + " " + data[j].lastname
+                        var tempstr = data[j].lastname + " " + data[j].firstname
                             + "->" + data[j].action + ":" + data[j].target;
 
                         if (tempstr != previousStr && sameStrCount == 0) {

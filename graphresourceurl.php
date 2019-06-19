@@ -28,7 +28,7 @@ if ($numberofstudents == 0) {
     exit;
 }
 foreach ($students as $tuple) {
-    $arrayofstudents[] = array('userid' => $tuple->id, 'nome' => $tuple->firstname . ' ' . $tuple->lastname, 'email' => $tuple->email);
+    $arrayofstudents[] = array('userid' => $tuple->id, 'nome' => $tuple->lastname . ' ' . $tuple->firstname, 'email' => $tuple->email);
 }
 
 $requestedtypes = array();
@@ -160,7 +160,7 @@ foreach ($result as $tuple) {
 
         if ($tuple->userid) { /* If a user accessed -> get name */
             $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
-                'nome' => $tuple->firstname . " " . $tuple->lastname, 'email' => $tuple->email);
+                'nome' => $tuple->lastname . " " . $tuple->firstname, 'email' => $tuple->email);
             $numberofaccesses++;
         }
         $resourceid = $tuple->ident;
@@ -168,7 +168,7 @@ foreach ($result as $tuple) {
         if ($resourceid == $tuple->ident and $tuple->userid) {
             // If same resource and someone accessed, add student.
             $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
-                'nome' => $tuple->firstname . " " . $tuple->lastname, 'email' => $tuple->email);
+                'nome' => $tuple->lastname . " " . $tuple->firstname, 'email' => $tuple->email);
             $numberofaccesses++;
         }
         if ($resourceid != $tuple->ident) {
@@ -227,7 +227,7 @@ foreach ($result as $tuple) {
 
             if ($tuple->userid) {
                 $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
-                    'nome' => $tuple->firstname . " " . $tuple->lastname, 'email' => $tuple->email);
+                    'nome' => $tuple->lastname . " " . $tuple->firstname, 'email' => $tuple->email);
                 $numberofaccesses = 1;
             } else {
                 $numberofaccesses = 0;
